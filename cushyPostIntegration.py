@@ -21,6 +21,8 @@ class CushyPostIntegration:
             self.domain = "https://test.api.cushypost.com"
         elif self.environment == "PRD":
             self.domain = "https://api.cushypost.com"
+        else:
+            raise Exception("ENVIRONMENT NOT VALID")
         self.from_location = None
         self.to_location = None
         self.services = None
