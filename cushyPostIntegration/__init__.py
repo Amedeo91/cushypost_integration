@@ -1,0 +1,1 @@
+from cushyPostIntegration.cushyPostIntegration import CushyPostIntegration
