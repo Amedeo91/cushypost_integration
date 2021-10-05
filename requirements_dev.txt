@@ -1,0 +1,8 @@
+certifi==2021.5.30
+chardet==3.0.4
+charset-normalizer==2.0.6
+idna==2.8
+requests==2.22.0
+responses==0.14.0
+six==1.16.0
+urllib3==1.25.11
