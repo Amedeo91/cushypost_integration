@@ -65,7 +65,7 @@ class CushyPostIntegration:
                                     "{}/security/refresh_token".format(self.domain),
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer {}'.format(self.refresh_token)},
-                                    data=json.dumps({"app": "InOne"}))
+                                    data=json.dumps({"app": self.app}))
         if response.status_code != 200:
             raise Exception("REFRESH FAILED")
         self.token = response.raw.headers.get('X-Cushypost-JWT')
@@ -92,7 +92,7 @@ class CushyPostIntegration:
         return response
 
     @logger
-    def __geo_db_place_autocomplete(self, country_code, cap, multi_results=False):
+    def __geo_db_place_autocomplete(self, country_code, cap, city=None, multi_results=False):
         """
         Integration of autocomplete
         :param country_code:
@@ -117,10 +117,15 @@ class CushyPostIntegration:
         locations = response.json()["response"]["data"]
         if multi_results:
             for location in locations:
-                self.geo_db_data["{}_{}".format(country_code, location["postcode"])] = location
+                self.geo_db_data["{}_{}_{}".format(country_code, location["postcode"], location["city"])] = location
             return locations
         if len(locations) != 1:
-            raise Exception("GEODB AUTOCOMPLETE FAILED")
+            if city:
+                locations = [location for location in locations if location["city"] == city]
+                if len(locations) != 1:
+                    raise Exception("GEODB AUTOCOMPLETE FAILED")
+            else:
+                raise Exception("GEODB AUTOCOMPLETE FAILED")
         return locations[0]
 
     @logger
@@ -134,15 +139,15 @@ class CushyPostIntegration:
         return self.__geo_db_place_autocomplete(country_code, cap, multi_results=True)
 
     @logger
-    def set_from(self, country_code, cap):
-        self.__set_elem(country_code, cap, "from_location", "from")
+    def set_from(self, country_code, cap, city):
+        self.__set_elem(country_code, cap, city, "from_location", "from")
 
     @logger
-    def set_to(self, country_code, cap):
-        self.__set_elem(country_code, cap, "to_location", "to")
+    def set_to(self, country_code, cap, city):
+        self.__set_elem(country_code, cap, city, "to_location", "to")
 
     @logger
-    def __set_elem(self, country_code, cap, elem, elem_name):
+    def __set_elem(self, country_code, cap, city, elem, elem_name):
         """
         Here we are expecting a real zipcode.
         :param country_code:
@@ -151,10 +156,10 @@ class CushyPostIntegration:
         :param elem_name:
         :return:
         """
-        geo_db_data_key = "{}_{}".format(country_code, cap)
+        geo_db_data_key = "{}_{}_{}".format(country_code, cap, city)
         location = self.geo_db_data[geo_db_data_key] \
-            if self.geo_db_data.get("{}_{}".format(country_code, cap)) \
-            else self.__geo_db_place_autocomplete(country_code, cap)
+            if self.geo_db_data.get(geo_db_data_key) \
+            else self.__geo_db_place_autocomplete(country_code, cap, city)
         setattr(self, elem, {
             "name": elem_name,
             "country": country_code,
