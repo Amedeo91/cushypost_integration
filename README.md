@@ -7,10 +7,11 @@ import cushyPostIntegration
 client = cushyPostIntegration.CushyPostIntegration("TEST", "MY_APP")
 client.login("USERNAME", "PASSWORD")
 client.set_from("IT", "00150")
+client.search_geo_db("IT", "2015")
 client.set_to("IT", "20150")
 client.set_services("2021")
 client.set_shipping([{
-	"type": "Parcel,
+	"type": "Parcel",
 	"height": "10",
 	"width": "10",
 	"length": "10",
