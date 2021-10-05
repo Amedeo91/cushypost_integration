@@ -1,10 +1,9 @@
 import logging
 import time
+from functools import wraps
 
 
 def logger(fn):
-    from functools import wraps
-
     @wraps(fn)
     def wrapper(*args, **kwargs):
         start_time = time.time()

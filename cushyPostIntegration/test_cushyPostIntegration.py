@@ -20,3 +20,6 @@ class TestEmailSenderHelper(unittest.TestCase):
             CushyPostIntegration("NOT_VALID", "NEW_APP", token="token", refresh_token="refresh_token")
         except Exception as error:
             self.assertEqual(str(error), "ENVIRONMENT NOT VALID")
+
+    def test_login(self):
+        class_initializer = CushyPostIntegration("TEST", "NEW_APP", token="token", refresh_token="refresh_token")
