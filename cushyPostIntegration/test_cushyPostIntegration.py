@@ -137,6 +137,146 @@ class TestCushyPostIntegration(unittest.TestCase):
         self.assertEqual(cushy_post_integration.refresh_token, "X-Cushypost-Refresh-JWT_REFRESH_new")
 
     @responses.activate
+    def test_search_geo_db_success_set_from_no_search(self):
+        cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+        cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+        cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+        responses.add(responses.POST, "{}/geodb/place_autocomplete".format(cushy_post_integration.domain),
+                      match=[
+                          responses.json_params_matcher({
+                              "app": cushy_post_integration.app,
+                              "country_code": "IT",
+                              "sequence": "00020 Agosta",
+                              "limit": 10
+                          })
+                      ],
+                      json={
+                          "response": {
+                              "succeed": True,
+                              "errcode": 200,
+                              "errmsg": None,
+                              "error": None,
+                              "data": [
+                                  {
+                                      "updated": "2021-05-27T00:23:38.2459084Z",
+                                      "id": "7e8ccb1698bb2a6f7a9dfcac0892c61f",
+                                      "country": "IT",
+                                      "province": "RM",
+                                      "provinceDescription": "Roma",
+                                      "region": "Lazio",
+                                      "postcode": "00020",
+                                      "city": "Agosta",
+                                      "location": {
+                                          "type": "Point",
+                                          "coordinates": [
+                                              "13.03128",
+                                              "41.98044"
+                                          ]
+                                      },
+                                      "description": "00020 Agosta"
+                                  }
+                              ]
+                          }
+                      },
+                      status=200)
+        cushy_post_integration.set_from("IT", "00020", "Agosta")
+        self.assertEqual(cushy_post_integration.from_location, {
+            "administrative_area_level_1": "Lazio", "administrative_area_level_2": "RM",
+            "city": "Agosta", "contact": "", "country": "IT", "email": "", "hash": "7e8ccb1698bb2a6f7a9dfcac0892c61f",
+            "locality": "Agosta", "location": {"lat": "41.98044", "lng": "13.03128", "location_type": "APPROXIMATE"},
+            "name": "from",
+            "phone": "",
+            "postalcode": "00020",
+            "province": "RM",
+            "type": "geodb",
+            "validity": {"component": "postalcode", "valid": True}})
+        responses.add(responses.POST, "{}/geodb/place_autocomplete".format(cushy_post_integration.domain),
+                      match=[
+                          responses.json_params_matcher({
+                              "app": cushy_post_integration.app,
+                              "country_code": "IT",
+                              "sequence": "00020 Agostaasdsd",
+                              "limit": 10
+                          })
+                      ],
+                      json={
+                          "response": {
+                              "succeed": True,
+                              "errcode": 200,
+                              "errmsg": None,
+                              "error": None,
+                              "data": []
+                          }
+                      },
+                      status=200)
+        responses.add(responses.POST, "{}/geodb/place_autocomplete".format(cushy_post_integration.domain),
+                      match=[
+                          responses.json_params_matcher({
+                              "app": cushy_post_integration.app,
+                              "country_code": "IT",
+                              "sequence": "00020",
+                              "limit": 10
+                          })
+                      ],
+                      json={
+                          "response": {
+                              "succeed": True,
+                              "errcode": 200,
+                              "errmsg": None,
+                              "error": None,
+                              "data": [
+                                  {
+                                      "updated": "2021-05-27T00:23:38.2459084Z",
+                                      "id": "7e8ccb1698bb2a6f7a9dfcac0892c61f",
+                                      "country": "IT",
+                                      "province": "RM",
+                                      "provinceDescription": "Roma",
+                                      "region": "Lazio",
+                                      "postcode": "00020",
+                                      "city": "Agosta",
+                                      "location": {
+                                          "type": "Point",
+                                          "coordinates": [
+                                              "13.03128",
+                                              "41.98044"
+                                          ]
+                                      },
+                                      "description": "00020 Agosta"
+                                  }, {
+                                      "updated": "2021-05-27T00:23:38.2459084Z",
+                                      "id": "ba21e9f6013d6d97b4fa6f64939bef06",
+                                      "country": "IT",
+                                      "province": "RM",
+                                      "provinceDescription": "Roma",
+                                      "region": "Lazio",
+                                      "postcode": "00020",
+                                      "city": "Arcinazzo Romano",
+                                      "location": {
+                                          "type": "Point",
+                                          "coordinates": [
+                                              "13.11351",
+                                              "41.88062"
+                                          ]
+                                      },
+                                      "description": "00020 Arcinazzo Romano"
+                                  }
+                              ]
+                          }
+                      },
+                      status=200)
+        cushy_post_integration.set_from("IT", "00020", "Agostaasdsd")
+        self.assertEqual(cushy_post_integration.from_location, {
+            "administrative_area_level_1": "Lazio", "administrative_area_level_2": "RM",
+            "city": "Agosta", "contact": "", "country": "IT", "email": "", "hash": "7e8ccb1698bb2a6f7a9dfcac0892c61f",
+            "locality": "Agosta", "location": {"lat": "41.98044", "lng": "13.03128", "location_type": "APPROXIMATE"},
+            "name": "from",
+            "phone": "",
+            "postalcode": "00020",
+            "province": "RM",
+            "type": "geodb",
+            "validity": {"component": "postalcode", "valid": True}})
+
+    @responses.activate
     def test_search_geo_db_success_with_refresh(self):
         cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
         cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"

@@ -105,7 +105,7 @@ class CushyPostIntegration:
         request_body = {
             "app": self.app,
             "country_code": country_code,
-            "sequence": cap,
+            "sequence": "{} {}".format(cap, city) if city else cap,
             "limit": 10
         }
         response = self.__call_endpoint_with_refresh("POST",
@@ -119,12 +119,10 @@ class CushyPostIntegration:
             for location in locations:
                 self.geo_db_data["{}_{}_{}".format(country_code, location["postcode"], location["city"])] = location
             return locations
-        if len(locations) != 1:
-            if city:
-                locations = [location for location in locations if location["city"] == city]
-                if len(locations) != 1:
-                    raise Exception("GEODB AUTOCOMPLETE FAILED")
-            else:
+        if len(locations) == 0:
+            # This part is useful for the quotation part! As the CAP define the price.
+            locations = self.__geo_db_place_autocomplete(country_code, cap, multi_results=True)
+            if len(locations) == 0:
                 raise Exception("GEODB AUTOCOMPLETE FAILED")
         return locations[0]
 
