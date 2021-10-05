@@ -3,7 +3,6 @@ import json
 import datetime
 import uuid
 from cushyPostIntegration.logger_decorator import logger
-import logging
 
 
 class CushyPostIntegration:
@@ -200,7 +199,7 @@ class CushyPostIntegration:
         collection_date = datetime.datetime.utcnow().replace(microsecond=0)
         # We take the first day out of the weekend
         collection_date = collection_date + datetime.timedelta(days=7-collection_date.weekday()
-                                                                    if collection_date.weekday() > 3 else 1)
+                                                               if collection_date.weekday() > 3 else 1)
 
         response = self.__call_endpoint_with_refresh("POST",
                                                      "calendar/holidays",
@@ -214,7 +213,7 @@ class CushyPostIntegration:
                     # If the next day is during the week end, we move after
                     if collection_date.weekday() > 4:
                         collection_date = collection_date + datetime.timedelta(days=1 if collection_date.weekday() == 6
-                                                                                    else 2)
+                                                                               else 2)
         # We keep cash_on_delivery and insurance hardcoded to 0
         self.services = {
             "collection": {
@@ -247,7 +246,7 @@ class CushyPostIntegration:
             "goods_desc": "content",
             "product": "All",
             "special_instructions": "Questo è solo un test. Si prega di cancellare!"
-                if self.environment == "TEST" else "Nessuna",
+                                    if self.environment == "TEST" else "Nessuna",
             "packages": [{
                 "type": package.get("type", "Parcel"),
                 "height": package["height"],

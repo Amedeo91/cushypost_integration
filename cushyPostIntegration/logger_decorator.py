@@ -8,9 +8,11 @@ def logger(fn):
     def wrapper(*args, **kwargs):
         start_time = time.time()
         logging.debug('About to run %s' % fn.__name__)
-        out = fn(*args, **kwargs)
-        logging.debug('Done running %s' % fn.__name__)
-        logging.debug("--- %s seconds ---" % (time.time() - start_time))
-        # Return the return value
-        return out
+        try:
+            return fn(*args, **kwargs)
+        except Exception as error:
+            raise error
+        finally:
+            logging.debug('Done running %s' % fn.__name__)
+            logging.debug("--- %s seconds ---" % (time.time() - start_time))
     return wrapper
