@@ -983,6 +983,26 @@ class TestCushyPostIntegration(unittest.TestCase):
         self.assertNotIn(collection_date.split("T")[0],
                          [holiday["date"] for holiday in calendar_holiday_resp["response"]["data"]])
 
+    def test_shipping_all_details(self):
+        cushy_post_integration = CushyPostIntegration("PRD", "NEW_APP")
+        cushy_post_integration.set_shipping([{
+            "type": "Parcel",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10",
+            "contentDesc": "Nice parcel"
+        }, {
+            "type": "Pallet",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10"
+        }], goods_desc="goods_desc", special_instructions="special_instructions")
+        cushy_post_integration.shipping["packages"][0]["hash"] = "HASH"
+        cushy_post_integration.shipping["packages"][1]["hash"] = "HASH"
+        self.assertEqual(cushy_post_integration.shipping, {'total_weight': 20, 'goods_desc': 'goods_desc', 'product': 'All', 'special_instructions': 'special_instructions', 'packages': [{'type': 'Parcel', 'height': '10', 'width': '10', 'length': '10', 'weight': '10', 'content': 'Nice parcel', 'hash': 'HASH'}, {'type': 'Pallet', 'height': '10', 'width': '10', 'length': '10', 'weight': '10', 'content': 'content', 'hash': 'HASH'}]})
+
     @responses.activate
     def test_rate_generation(self):
         cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
