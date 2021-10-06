@@ -325,6 +325,7 @@ class CushyPostIntegration:
                 for package in self.shipping["packages"]:
                     extra_details = shipping_extra_data["packages"].get(package["hash"], {})
                     package["content"] = extra_details.get("contentDesc", package["content"])
+                    package["contentDesc"] = package["content"]
             self.set_shipping(self.shipping["packages"],
                               goods_desc=shipping_extra_data.get("goodsDesc"),
                               special_instructions=shipping_extra_data.get("specialInstructions"))
