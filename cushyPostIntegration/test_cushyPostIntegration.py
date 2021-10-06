@@ -950,6 +950,40 @@ class TestCushyPostIntegration(unittest.TestCase):
                          [holiday["date"] for holiday in calendar_holiday_resp["response"]["data"]])
 
     @responses.activate
+    def test_set_services_all_details(self):
+        cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+        cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+        cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+        calendar_holiday_resp = {"response": {"succeed": True, "errcode": 200, "errmsg": None, "error": None, "data": [{"date": "2021-01-01", "localName": "Capodanno", "name": "NewYear'sDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": 1967, "type": "Public"}, {"date": "2021-01-06", "localName": "Epifania", "name": "Epiphany", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-04-04", "localName": "Pasqua", "name": "EasterSunday", "countryCode": "IT", "fixed": False, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-04-05", "localName": "Lunedìdell'Angelo", "name": "EasterMonday", "countryCode": "IT", "fixed": False, "global": True, "counties": None, "launchYear": 1642, "type": "Public"}, {"date": "2021-04-25", "localName": "FestadellaLiberazione", "name": "LiberationDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-05-01", "localName": "FestadelLavoro", "name": "InternationalWorkersDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-06-02", "localName": "FestadellaRepubblica", "name": "RepublicDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-08-15", "localName": "FerragostooAssunzione", "name": "AssumptionDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-11-01", "localName": "Tuttiisanti", "name": "AllSaintsDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-12-08", "localName": "ImmacolataConcezione", "name": "ImmaculateConception", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-12-25", "localName": "Natale", "name": "ChristmasDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2021-12-26", "localName": "SantoStefano", "name": "St.Stephen'sDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-01-01", "localName": "Capodanno", "name": "NewYear'sDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": 1967, "type": "Public"}, {"date": "2022-01-06", "localName": "Epifania", "name": "Epiphany", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-04-17", "localName": "Pasqua", "name": "EasterSunday", "countryCode": "IT", "fixed": False, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-04-18", "localName": "Lunedìdell'Angelo", "name": "EasterMonday", "countryCode": "IT", "fixed": False, "global": True, "counties": None, "launchYear": 1642, "type": "Public"}, {"date": "2022-04-25", "localName": "FestadellaLiberazione", "name": "LiberationDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-05-01", "localName": "FestadelLavoro", "name": "InternationalWorkersDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-06-02", "localName": "FestadellaRepubblica", "name": "RepublicDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-08-15", "localName": "FerragostooAssunzione", "name": "AssumptionDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-11-01", "localName": "Tuttiisanti", "name": "AllSaintsDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-12-08", "localName": "ImmacolataConcezione", "name": "ImmaculateConception", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-12-25", "localName": "Natale", "name": "ChristmasDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}, {"date": "2022-12-26", "localName": "SantoStefano", "name": "St.Stephen'sDay", "countryCode": "IT", "fixed": True, "global": True, "counties": None, "launchYear": None, "type": "Public"}]}}
+
+        responses.add(responses.POST, "{}/calendar/holidays".format(cushy_post_integration.domain),
+                      json=calendar_holiday_resp,
+                      status=200)
+        cushy_post_integration.from_location = {'administrative_area_level_1': 'Lazio',
+                                                'administrative_area_level_2': 'RM',
+                                                'city': 'Vivaro Romano', 'contact': '', 'country': 'IT', 'email': '',
+                                                'hash': 'b9b645b94641103026828a421dec14ce', 'locality': 'Vivaro Romano',
+                                                'location': {'lat': '42.09882', 'lng': '13.00659',
+                                                             'location_type': 'APPROXIMATE'},
+                                                'name': 'from', 'phone': '', 'postalcode': '00020',
+                                                'province': 'RM', 'type': 'geodb',
+                                                'validity': {'component': 'postalcode', 'valid': True}}
+        cushy_post_integration.set_services("2021", month="11", day="1", insurance_value="10.0", cash_on_delivery="10")
+        self.assertEqual(len(responses.calls), 1)
+        self.assertEqual(json.loads(responses.calls[0].request.body), {"app": cushy_post_integration.app,
+                                                                       "year": "2021",
+                                                                       "country": "IT"})
+        collection_date = cushy_post_integration.services.get("collection", {}).pop("date", None)
+        self.assertEqual(cushy_post_integration.services, {'cash_on_delivery': {'currency': 'EUR', 'value': 10},
+                                                           'collection': {'hours': [10, 14]},
+                                                           'insurance': {'algorithm': 'any',
+                                                                         'currency': 'EUR',
+                                                                         'value': 10.0}})
+        self.assertEqual(collection_date.split("T")[0], "2021-11-02")
+        self.assertNotIn(collection_date.split("T")[0],
+                         [holiday["date"] for holiday in calendar_holiday_resp["response"]["data"]])
+
+    @responses.activate
     def test_rate_generation(self):
         cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
         cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"

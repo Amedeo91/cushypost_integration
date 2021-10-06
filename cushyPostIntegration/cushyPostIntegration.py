@@ -184,10 +184,14 @@ class CushyPostIntegration:
         })
 
     @logger
-    def set_services(self, year):
+    def set_services(self, year, month=None, day=None, insurance_value=None, cash_on_delivery=None):
         """
         Generation of the services node
         :param year:
+        :param month (optional)
+        :param day (optional)
+        :param insurance_value (optional)
+        :param cash_on_delivery (optional)
         :return:
         """
         if not self.from_location:
@@ -200,10 +204,17 @@ class CushyPostIntegration:
             "year": year
         }
         collection_date = datetime.datetime.utcnow().replace(microsecond=0)
-        # We take the first day out of the weekend
-        collection_date = collection_date + datetime.timedelta(days=7-collection_date.weekday()
-                                                               if collection_date.weekday() > 3 else 1)
-
+        collection_date = collection_date.replace(year=int(year))
+        if month:
+            collection_date = collection_date.replace(month=int(month))
+        if day:
+            collection_date = collection_date.replace(day=int(day))
+        if day or month:
+            if collection_date.weekday() > 4:
+                collection_date = collection_date + datetime.timedelta(days=1 if collection_date.weekday() == 6 else 2)
+        else:
+            collection_date = collection_date + datetime.timedelta(days=7-collection_date.weekday()
+                                                                   if collection_date.weekday() > 3 else 1)
         response = self.__call_endpoint_with_refresh("POST",
                                                      "calendar/holidays",
                                                      data=json.dumps(request_body))
@@ -224,39 +235,41 @@ class CushyPostIntegration:
                 "hours": [10, 14]
             },
             "insurance": {
-                "value": 0,
+                "value": float(insurance_value) if insurance_value else 0,
                 "currency": "EUR",
-                "algorithm": "none"
+                "algorithm": "any" if insurance_value else "none"
             },
             "cash_on_delivery": {
-                "value": 0,
+                "value": float(cash_on_delivery) if cash_on_delivery else 0,
                 "currency": "EUR"
             }
         }
 
     @logger
-    def set_shipping(self, packages):
+    def set_shipping(self, packages, goods_desc=None, special_instructions=None):
         """
         Generation of shipping node
         :param packages:
+        :param goods_desc: (optional)
+        :param special_instructions: (optional)
         :return:
         """
-        # goods_desc, product, special_instructions --> eventually, those should be specified by the user
         if not packages:
             raise Exception("MISSING DATA")
         self.shipping = {
             "total_weight": sum([int(package["weight"]) for package in packages]),
-            "goods_desc": "content",
+            "goods_desc": goods_desc if goods_desc else "content",
             "product": "All",
             "special_instructions": "Questo è solo un test. Si prega di cancellare!"
-                                    if self.environment == "TEST" else "Nessuna",
+                                    if self.environment == "TEST" else (special_instructions
+                                                                        if special_instructions else "Nessuna"),
             "packages": [{
                 "type": package.get("type", "Parcel"),
                 "height": package["height"],
                 "width": package["width"],
                 "length": package["length"],
                 "weight": package["weight"],
-                "content": "content",
+                "content": package["contentDesc"] if package.get("contentDesc") else "content",
                 "hash": uuid.uuid4().hex
             } for package in packages]
         }
