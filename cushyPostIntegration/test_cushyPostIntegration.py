@@ -1131,7 +1131,7 @@ class TestCushyPostIntegration(unittest.TestCase):
                       status=200)
         cushy_post_integration.get_rates()
         self.assertEqual(len(responses.calls), 1)
-        request_sent =json.loads(responses.calls[0].request.body)
+        request_sent = json.loads(responses.calls[0].request.body)
         request_sent["shipping"]["packages"][0]["hash"] = "HASH"
         request_sent["shipping"]["packages"][1]["hash"] = "HASH"
         self.assertEqual(request_sent, {"app": "NEW_APP", "from": {"administrative_area_level_1": "Lazio", "administrative_area_level_2": "RM", "city": "Vivaro Romano", "contact": "", "country": "IT", "email": "", "hash": "b9b645b94641103026828a421dec14ce", "locality": "Vivaro Romano", "location": {"lat": "42.09882", "lng": "13.00659", "location_type": "APPROXIMATE"}, "name": "from", "phone": "", "postalcode": "00020", "province": "RM", "type": "geodb", "validity": {"component": "postalcode", "valid": True}}, "to": {"administrative_area_level_1": "Lazio", "administrative_area_level_2": "RM", "city": "Subiaco", "contact": "", "country": "IT", "email": "", "hash": "a006fcf1d1a756168439393a59002120", "locality": "Subiaco", "location": {"lat": "41.92532", "lng": "13.09276", "location_type": "APPROXIMATE"}, "name": "to", "phone": "", "postalcode": "00028", "province": "RM", "type": "geodb", "validity": {"component": "postalcode", "valid": True}}, "shipping": {"total_weight": 20, "goods_desc": "content", "product": "All", "special_instructions": "Questo \u00e8 solo un test. Si prega di cancellare!", "packages": [{"type": "Parcel", "height": "10", "width": "10", "length": "10", "weight": "10", "content": "content", "hash": "HASH"}, {"type": "Pallet", "height": "10", "width": "10", "length": "10", "weight": "10", "content": "content", "hash": "HASH"}]}, "services": {"cash_on_delivery": {"currency": "EUR", "value": 0}, "collection": {"date": "2021-10-06T15:31:51Z", "hours": [10, 14]}, "insurance": {"algorithm": "none", "currency": "EUR", "value": 0}}})
@@ -1341,7 +1341,6 @@ class TestCushyPostIntegration(unittest.TestCase):
         cushy_post_integration.shipping["packages"][0]["hash"] = "HASH"
         cushy_post_integration.shipping["packages"][1]["hash"] = "HASH"
         current_dict_image = cushy_post_integration.get_dict()
-        logging.info(current_dict_image)
         new_cushy_post_integration_dict = CushyPostIntegration("TEST", "TEMP")
         new_cushy_post_integration_dict.parse_from_dict(current_dict_image)
         new_cushy_post_integration_str = CushyPostIntegration("TEST", "TEMP")
@@ -2009,3 +2008,78 @@ class TestCushyPostIntegration(unittest.TestCase):
                 }
             }
         })
+
+    @responses.activate
+    def test_approve_quotation(self):
+        cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+        cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+        cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+        cushy_post_integration.from_location = {'administrative_area_level_1': 'Lazio',
+                                                'administrative_area_level_2': 'RM',
+                                                'city': 'Vivaro Romano', 'contact': '', 'country': 'IT', 'email': '',
+                                                'hash': 'b9b645b94641103026828a421dec14ce', 'locality': 'Vivaro Romano',
+                                                'location': {'lat': '42.09882', 'lng': '13.00659',
+                                                             'location_type': 'APPROXIMATE'},
+                                                'name': 'from', 'phone': '', 'postalcode': '00020',
+                                                'province': 'RM', 'type': 'geodb',
+                                                'validity': {'component': 'postalcode', 'valid': True}}
+        cushy_post_integration.to_location = {'administrative_area_level_1': 'Lazio',
+                                              'administrative_area_level_2': 'RM',
+                                              'city': 'Subiaco', 'contact': '', 'country': 'IT', 'email': '',
+                                              'hash': 'a006fcf1d1a756168439393a59002120', 'locality': 'Subiaco',
+                                              'location': {'lat': '41.92532',
+                                                           'lng': '13.09276',
+                                                           'location_type': 'APPROXIMATE'},
+                                              'name': 'to', 'phone': '', 'postalcode': '00028',
+                                              'province': 'RM', 'type': 'geodb',
+                                              'validity': {'component': 'postalcode', 'valid': True}}
+        cushy_post_integration.services = {'cash_on_delivery': {'currency': 'EUR', 'value': 0},
+                                           'collection': {'date': '2021-10-06T15:31:51Z', 'hours': [10, 14]},
+                                           'insurance': {'algorithm': 'none',
+                                                         'currency': 'EUR',
+                                                         'value': 0}}
+        cushy_post_integration.set_shipping([{
+            "type": "Parcel",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10"
+        }, {
+            "type": "Pallet",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10"
+        }])
+        responses.add(responses.POST, "{}/quotation/approve".format(cushy_post_integration.domain),
+                      json={"response": {"data": {}}},
+                      status=200)
+        cushy_post_integration.shipping["packages"][0]["hash"] = "HASH1"
+        cushy_post_integration.shipping["packages"][1]["hash"] = "HASH2"
+        cushy_post_integration.approve_quotation(
+            "61571df49361ef4712506e42",
+            {
+                "name": "GIULIO CESARE OTTAVIANO AUGUSTO",
+                "phone": "0000000",
+                "email": "ottaviano.augusto@yopmail.com",
+                "address": "Via dei Fori Imperiali, 100"
+            },
+            {
+                "name": "MARCO ANTONIO",
+                "email": "marco.antonio@yopmail.com",
+                "address": "Via de Il Cairo, 100"
+            },
+            shipping_extra_data={
+                "goodsDesc": "VENI, VIDI, VICI",
+                "specialInstructions": "Fragile",
+                "packages": {
+                    "HASH1": {
+                        "contentDesc": "CAVE CANEM"
+                    }
+                }
+            })
+        self.assertEqual(len(responses.calls), 1)
+        request_sent = json.loads(responses.calls[0].request.body)
+        request_sent["order"]["shipping"]["packages"][0]["hash"] = "HASH"
+        request_sent["order"]["shipping"]["packages"][1]["hash"] = "HASH"
+        self.assertDictEqual(request_sent, {'app': 'NEW_APP', 'as': 'WaitingForPayment', 'quotation_id': '61571df49361ef4712506e42', 'order': {'quotation': '61571df49361ef4712506e42', 'from': {'administrative_area_level_1': 'Lazio', 'administrative_area_level_2': 'RM', 'city': 'Vivaro Romano', 'contact': '', 'country': 'IT', 'email': 'ottaviano.augusto@yopmail.com', 'hash': 'b9b645b94641103026828a421dec14ce', 'locality': 'Vivaro Romano', 'location': {'lat': '42.09882', 'lng': '13.00659', 'location_type': 'APPROXIMATE'}, 'name': 'GIULIO CESARE OTTAVIANO AUGUSTO', 'phone': '0000000', 'postalcode': '00020', 'province': 'RM', 'type': 'geodb', 'validity': {'component': 'postalcode', 'valid': True}, 'address': 'Via dei Fori Imperiali, 100', 'administrative_area_level_3': 'Vivaro Romano'}, 'to': {'administrative_area_level_1': 'Lazio', 'administrative_area_level_2': 'RM', 'city': 'Subiaco', 'contact': '', 'country': 'IT', 'email': 'marco.antonio@yopmail.com', 'hash': 'a006fcf1d1a756168439393a59002120', 'locality': 'Subiaco', 'location': {'lat': '41.92532', 'lng': '13.09276', 'location_type': 'APPROXIMATE'}, 'name': 'MARCO ANTONIO', 'phone': '0000000', 'postalcode': '00028', 'province': 'RM', 'type': 'geodb', 'validity': {'component': 'postalcode', 'valid': True}, 'address': 'Via de Il Cairo, 100', 'administrative_area_level_3': 'Subiaco'}, 'shipping': {'total_weight': 20, 'goods_desc': 'VENI, VIDI, VICI', 'product': 'All', 'special_instructions': 'Questo è solo un test. Si prega di cancellare!', 'packages': [{'type': 'Parcel', 'height': '10', 'width': '10', 'length': '10', 'weight': '10', 'content': 'content', 'hash': 'HASH'}, {'type': 'Pallet', 'height': '10', 'width': '10', 'length': '10', 'weight': '10', 'content': 'content', 'hash': 'HASH'}]}, 'services': {'cash_on_delivery': {'currency': 'EUR', 'value': 0}, 'collection': {'date': '2021-10-06T15:31:51Z', 'hours': [10, 14]}, 'insurance': {'algorithm': 'none', 'currency': 'EUR', 'value': 0}}}})

@@ -293,6 +293,60 @@ class CushyPostIntegration:
             raise Exception("SHIPPING RATE FAILED")
         return response.json()["response"]["data"]
 
+    @logger
+    def approve_quotation(self, quotation_id, from_extra_data, to_extra_data, shipping_extra_data=None):
+        """
+        Call to get rates
+        :param quotation_id: id of the rate to approve
+        :param from_extra_data: data with all the info for from address
+        :param to_extra_data: data with all the info for to address
+        :param shipping_extra_data: (optional) data with description and special instructions.
+                                    It needs to contains the has of the packages for which
+                                    we want to modify the description
+        :return:
+        """
+        if not self.token:
+            raise Exception("MISSING TOKENS")
+        if not self.from_location or not self.to_location or not self.shipping or not self.services:
+            raise Exception("MISSING DATA")
+        # PUT FINAL INFORMATION FOR ADDRESSES AND DESCRIPTIONS
+        self.from_location["name"] = from_extra_data["name"]
+        self.from_location["phone"] = from_extra_data["phone"]
+        self.from_location["email"] = from_extra_data["email"]
+        self.from_location["address"] = from_extra_data["address"]
+        self.from_location["administrative_area_level_3"] = self.from_location["city"]
+        self.to_location["name"] = to_extra_data["name"]
+        self.to_location["phone"] = to_extra_data.get("phone", self.from_location["phone"])
+        self.to_location["email"] = to_extra_data.get("email", self.from_location["email"])
+        self.to_location["address"] = to_extra_data["address"]
+        self.to_location["administrative_area_level_3"] = self.to_location["city"]
+        if shipping_extra_data:
+            if shipping_extra_data.get("packages") and isinstance(shipping_extra_data["packages"], dict):
+                for package in self.shipping["packages"]:
+                    extra_details = shipping_extra_data["packages"].get(package["hash"], {})
+                    package["content"] = extra_details.get("contentDesc", package["content"])
+            self.set_shipping(self.shipping["packages"],
+                              goods_desc=shipping_extra_data.get("goodsDesc"),
+                              special_instructions=shipping_extra_data.get("specialInstructions"))
+        request_body = {
+            "app": self.app,
+            "as": "WaitingForPayment",
+            "quotation_id": quotation_id,
+            "order": {
+                "quotation": quotation_id,
+                "from": self.from_location,
+                "to": self.to_location,
+                "shipping": self.shipping,
+                "services": self.services
+            }
+        }
+        response = self.__call_endpoint_with_refresh("POST",
+                                                     "quotation/approve",
+                                                     data=json.dumps(request_body))
+        if response.status_code != 200:
+            raise Exception("SHIPPING RATE FAILED")
+        return response.json()["response"]["data"]
+
     def __get_domain(self):
         if self.environment == "TEST":
             return "https://test.api.cushypost.com"
