@@ -19,12 +19,7 @@ class CushyPostIntegration:
         self.token = token
         self.refresh_token = refresh_token
         self.app = app
-        if self.environment == "TEST":
-            self.domain = "https://test.api.cushypost.com"
-        elif self.environment == "PRD":
-            self.domain = "https://api.cushypost.com"
-        else:
-            raise Exception("ENVIRONMENT NOT VALID")
+        self.domain = self.__get_domain()
         self.from_location = None
         self.to_location = None
         self.services = None
@@ -298,7 +293,30 @@ class CushyPostIntegration:
             raise Exception("SHIPPING RATE FAILED")
         return response.json()["response"]["data"]
 
-    def __get_dict(self):
+    def __get_domain(self):
+        if self.environment == "TEST":
+            return "https://test.api.cushypost.com"
+        elif self.environment == "PRD":
+            return "https://api.cushypost.com"
+        else:
+            raise Exception("ENVIRONMENT NOT VALID")
+
+    def parse_from_str(self, class_json_image):
+        self.parse_from_dict(json.loads(class_json_image))
+
+    def parse_from_dict(self, class_dict_image):
+        self.environment = class_dict_image.get("classConfig", {})["environment"]
+        self.app = class_dict_image.get("classConfig", {})["app"]
+        self.domain = self.__get_domain()
+        self.token = class_dict_image.get("classConfig", {}).get("token")
+        self.refresh_token = class_dict_image.get("classConfig", {}).get("refresh_token")
+        self.from_location = class_dict_image.get("from_location")
+        self.to_location = class_dict_image.get("to_location")
+        self.services = class_dict_image.get("services")
+        self.shipping = class_dict_image.get("shipping")
+        self.geo_db_data = class_dict_image.get("geo_db_data", {})
+
+    def get_dict(self):
         return {
             "classConfig": {
                 "environment": self.environment,
@@ -315,10 +333,16 @@ class CushyPostIntegration:
         }
 
     def __get_string(self):
-        return json.dumps(self.__get_dict())
+        return json.dumps(self.get_dict())
 
     def __repr__(self):
         return self.__get_string()
 
     def __str__(self):
         return self.__get_string()
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, CushyPostIntegration):
+            return self.get_dict() == other.get_dict()
+        return False

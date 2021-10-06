@@ -1135,3 +1135,877 @@ class TestCushyPostIntegration(unittest.TestCase):
         request_sent["shipping"]["packages"][0]["hash"] = "HASH"
         request_sent["shipping"]["packages"][1]["hash"] = "HASH"
         self.assertEqual(request_sent, {"app": "NEW_APP", "from": {"administrative_area_level_1": "Lazio", "administrative_area_level_2": "RM", "city": "Vivaro Romano", "contact": "", "country": "IT", "email": "", "hash": "b9b645b94641103026828a421dec14ce", "locality": "Vivaro Romano", "location": {"lat": "42.09882", "lng": "13.00659", "location_type": "APPROXIMATE"}, "name": "from", "phone": "", "postalcode": "00020", "province": "RM", "type": "geodb", "validity": {"component": "postalcode", "valid": True}}, "to": {"administrative_area_level_1": "Lazio", "administrative_area_level_2": "RM", "city": "Subiaco", "contact": "", "country": "IT", "email": "", "hash": "a006fcf1d1a756168439393a59002120", "locality": "Subiaco", "location": {"lat": "41.92532", "lng": "13.09276", "location_type": "APPROXIMATE"}, "name": "to", "phone": "", "postalcode": "00028", "province": "RM", "type": "geodb", "validity": {"component": "postalcode", "valid": True}}, "shipping": {"total_weight": 20, "goods_desc": "content", "product": "All", "special_instructions": "Questo \u00e8 solo un test. Si prega di cancellare!", "packages": [{"type": "Parcel", "height": "10", "width": "10", "length": "10", "weight": "10", "content": "content", "hash": "HASH"}, {"type": "Pallet", "height": "10", "width": "10", "length": "10", "weight": "10", "content": "content", "hash": "HASH"}]}, "services": {"cash_on_delivery": {"currency": "EUR", "value": 0}, "collection": {"date": "2021-10-06T15:31:51Z", "hours": [10, 14]}, "insurance": {"algorithm": "none", "currency": "EUR", "value": 0}}})
+
+    def test_get_set_from_to_dict_str_image(self):
+        cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+        cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+        cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+        cushy_post_integration.from_location = {'administrative_area_level_1': 'Lazio',
+                                                'administrative_area_level_2': 'RM',
+                                                'city': 'Vivaro Romano', 'contact': '', 'country': 'IT', 'email': '',
+                                                'hash': 'b9b645b94641103026828a421dec14ce', 'locality': 'Vivaro Romano',
+                                                'location': {'lat': '42.09882', 'lng': '13.00659',
+                                                             'location_type': 'APPROXIMATE'},
+                                                'name': 'from', 'phone': '', 'postalcode': '00020',
+                                                'province': 'RM', 'type': 'geodb',
+                                                'validity': {'component': 'postalcode', 'valid': True}}
+        cushy_post_integration.to_location = {'administrative_area_level_1': 'Lazio',
+                                              'administrative_area_level_2': 'RM',
+                                              'city': 'Subiaco', 'contact': '', 'country': 'IT', 'email': '',
+                                              'hash': 'a006fcf1d1a756168439393a59002120', 'locality': 'Subiaco',
+                                              'location': {'lat': '41.92532',
+                                                           'lng': '13.09276',
+                                                           'location_type': 'APPROXIMATE'},
+                                              'name': 'to', 'phone': '', 'postalcode': '00028',
+                                              'province': 'RM', 'type': 'geodb',
+                                              'validity': {'component': 'postalcode', 'valid': True}}
+        cushy_post_integration.services = {'cash_on_delivery': {'currency': 'EUR', 'value': 0},
+                                           'collection': {'date': '2021-10-06T15:31:51Z', 'hours': [10, 14]},
+                                           'insurance': {'algorithm': 'none',
+                                                         'currency': 'EUR',
+                                                         'value': 0}}
+        cushy_post_integration.set_shipping([{
+            "type": "Parcel",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10"
+        }, {
+            "type": "Pallet",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10"
+        }])
+        cushy_post_integration.geo_db_data = {'IT_00020_Agosta': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '7e8ccb1698bb2a6f7a9dfcac0892c61f',
+                             'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                             'postcode': '00020', 'city': 'Agosta',
+                             'location': {'type': 'Point', 'coordinates': ['13.03128', '41.98044']},
+                             'description': '00020 Agosta'},
+         'IT_00020_Arcinazzo Romano': {'updated': '2021-05-27T00:23:38.2459084Z',
+                                       'id': 'ba21e9f6013d6d97b4fa6f64939bef06', 'country': 'IT', 'province': 'RM',
+                                       'provinceDescription': 'Roma', 'region': 'Lazio', 'postcode': '00020',
+                                       'city': 'Arcinazzo Romano',
+                                       'location': {'type': 'Point', 'coordinates': ['13.11351', '41.88062']},
+                                       'description': '00020 Arcinazzo Romano'},
+         'IT_00020_Camerata Nuova': {'updated': '2021-05-27T00:23:38.2459084Z',
+                                     'id': '54f9d1f2d34c1c20bcc9bcef22ef30fe', 'country': 'IT', 'province': 'RM',
+                                     'provinceDescription': 'Roma', 'region': 'Lazio', 'postcode': '00020',
+                                     'city': 'Camerata Nuova',
+                                     'location': {'type': 'Point', 'coordinates': ['13.10799', '42.0189']},
+                                     'description': '00020 Camerata Nuova'},
+         'IT_00020_Canterano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '7fc951747d68f00eca61d87c45f6b01e',
+                                'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                'postcode': '00020', 'city': 'Canterano',
+                                'location': {'type': 'Point', 'coordinates': ['13.03556', '41.94264']},
+                                'description': '00020 Canterano'},
+         'IT_00020_Cerreto Laziale': {'updated': '2021-05-27T00:23:38.2459084Z',
+                                      'id': 'acb7f46dbbeb895881ac7f4024676e71', 'country': 'IT', 'province': 'RM',
+                                      'provinceDescription': 'Roma', 'region': 'Lazio', 'postcode': '00020',
+                                      'city': 'Cerreto Laziale',
+                                      'location': {'type': 'Point', 'coordinates': ['12.98235', '41.94176']},
+                                      'description': '00020 Cerreto Laziale'},
+         'IT_00020_Cervara di Roma': {'updated': '2021-05-27T00:23:38.2459084Z',
+                                      'id': 'ba61abfbeeeb362a50eaf4e96b3a4c50', 'country': 'IT', 'province': 'RM',
+                                      'provinceDescription': 'Roma', 'region': 'Lazio', 'postcode': '00020',
+                                      'city': 'Cervara di Roma',
+                                      'location': {'type': 'Point', 'coordinates': ['13.06809', '41.98782']},
+                                      'description': '00020 Cervara di Roma'},
+         'IT_00020_Ciciliano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '57a536516180422b041ed562fb67690a',
+                                'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                'postcode': '00020', 'city': 'Ciciliano',
+                                'location': {'type': 'Point', 'coordinates': ['12.94025', '41.95968']},
+                                'description': '00020 Ciciliano'},
+         'IT_00020_Cineto Romano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'b5e9b6bb4c6eae7303e18aabd2aadb3b',
+                                    'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                    'postcode': '00020', 'city': 'Cineto Romano',
+                                    'location': {'type': 'Point', 'coordinates': ['12.96173', '42.04938']},
+                                    'description': '00020 Cineto Romano'},
+         'IT_00020_Jenne': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '9a05c697ce5c7a5fcc516f5b46d9e941',
+                            'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                            'postcode': '00020', 'city': 'Jenne',
+                            'location': {'type': 'Point', 'coordinates': ['13.17022', '41.88807']},
+                            'description': '00020 Jenne'},
+         'IT_00020_Mandela': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '70fcbc2e19b66e1b08133bb716c1d442',
+                              'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                              'postcode': '00020', 'city': 'Mandela',
+                              'location': {'type': 'Point', 'coordinates': ['12.92258', '42.02865']},
+                              'description': '00020 Mandela'},
+         'IT_00020_Marano Equo': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '4f87468146d6245870dd46a168b6b84e',
+                                  'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                  'postcode': '00020', 'city': 'Marano Equo',
+                                  'location': {'type': 'Point', 'coordinates': ['13.01495', '41.99239']},
+                                  'description': '00020 Marano Equo'},
+         'IT_00020_Percile': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'e4a15049b9a7fb915a2caa90c3f2b071',
+                              'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                              'postcode': '00020', 'city': 'Percile',
+                              'location': {'type': 'Point', 'coordinates': ['12.90777', '42.09578']},
+                              'description': '00020 Percile'},
+         'IT_00020_Pisoniano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'c3f1c23cb402ef04b8beea47c2c4c968',
+                                'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                'postcode': '00020', 'city': 'Pisoniano',
+                                'location': {'type': 'Point', 'coordinates': ['12.96029', '41.90715']},
+                                'description': '00020 Pisoniano'},
+         'IT_00020_Riofreddo': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '9c1f47f8d7158d09003bfe5f9b3ee942',
+                                'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                'postcode': '00020', 'city': 'Riofreddo',
+                                'location': {'type': 'Point', 'coordinates': ['12.99997', '42.06159']},
+                                'description': '00020 Riofreddo'},
+         'IT_00020_Rocca Canterano': {'updated': '2021-05-27T00:23:38.2459084Z',
+                                      'id': '6eec352b6dfe2cdd80fccd43fbf9a4b6', 'country': 'IT', 'province': 'RM',
+                                      'provinceDescription': 'Roma', 'region': 'Lazio', 'postcode': '00020',
+                                      'city': 'Rocca Canterano',
+                                      'location': {'type': 'Point', 'coordinates': ['13.02223', '41.95566']},
+                                      'description': '00020 Rocca Canterano'},
+         'IT_00020_Roccagiovine': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'c4b4fea600cc34e094c7762e40deb8ea',
+                                   'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                   'postcode': '00020', 'city': 'Roccagiovine',
+                                   'location': {'type': 'Point', 'coordinates': ['12.89943', '42.05017']},
+                                   'description': '00020 Roccagiovine'},
+         'IT_00020_Sambuci': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '59ed25456ff084c83ab1d9f53d4750f5',
+                              'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                              'postcode': '00020', 'city': 'Sambuci',
+                              'location': {'type': 'Point', 'coordinates': ['12.93573', '41.98435']},
+                              'description': '00020 Sambuci'},
+         'IT_00020_Saracinesco': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '2121c861a3612cdfd50ba316d154bee6',
+                                  'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                  'postcode': '00020', 'city': 'Saracinesco',
+                                  'location': {'type': 'Point', 'coordinates': ['12.95282', '42.00316']},
+                                  'description': '00020 Saracinesco'},
+         'IT_00020_Vallepietra': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'fbf21528be30ee593ff3de0351a1ad4e',
+                                  'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                  'postcode': '00020', 'city': 'Vallepietra',
+                                  'location': {'type': 'Point', 'coordinates': ['13.23058', '41.92543']},
+                                  'description': '00020 Vallepietra'},
+         'IT_00020_Vallinfreda': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '004839129ae3ee332d3fb5d61c640c31',
+                                  'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                  'postcode': '00020', 'city': 'Vallinfreda',
+                                  'location': {'type': 'Point', 'coordinates': ['12.99502', '42.08471']},
+                                  'description': '00020 Vallinfreda'},
+         'IT_00020_Vivaro Romano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'b9b645b94641103026828a421dec14ce',
+                                    'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                    'postcode': '00020', 'city': 'Vivaro Romano',
+                                    'location': {'type': 'Point', 'coordinates': ['13.00659', '42.09882']},
+                                    'description': '00020 Vivaro Romano'},
+         'IT_00021_Affile': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '372f708cbb6c26a7997b5087ba9d03f4',
+                             'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                             'postcode': '00021', 'city': 'Affile',
+                             'location': {'type': 'Point', 'coordinates': ['13.10203', '41.88488']},
+                             'description': '00021 Affile'},
+         'IT_00022_Anticoli Corrado': {'updated': '2021-05-27T00:23:38.2459084Z',
+                                       'id': '8d77a776ae1dd6c4fcc4983457afb87a', 'country': 'IT', 'province': 'RM',
+                                       'provinceDescription': 'Roma', 'region': 'Lazio', 'postcode': '00022',
+                                       'city': 'Anticoli Corrado',
+                                       'location': {'type': 'Point', 'coordinates': ['12.98905', '42.01061']},
+                                       'description': '00022 Anticoli Corrado'},
+         'IT_00023_Arsoli': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'd731b84e9a52e8049b0d6182f4ef7468',
+                             'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                             'postcode': '00023', 'city': 'Arsoli',
+                             'location': {'type': 'Point', 'coordinates': ['13.01609', '42.04069']},
+                             'description': '00023 Arsoli'},
+         'IT_00024_Castel Madama': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '8a287f982b3452a02af523c697826fe4',
+                                    'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                                    'postcode': '00024', 'city': 'Castel Madama',
+                                    'location': {'type': 'Point', 'coordinates': ['12.86566', '41.9742']},
+                                    'description': '00024 Castel Madama'},
+         'IT_00025_Gerano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '0a14f3b18799df30fd7a4fd3a8642ee7',
+                             'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                             'postcode': '00025', 'city': 'Gerano',
+                             'location': {'type': 'Point', 'coordinates': ['12.99504', '41.93303']},
+                             'description': '00025 Gerano'},
+         'IT_00026_Licenza': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '3c8ff61bfe378981666a4fc7afe5eb5d',
+                              'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                              'postcode': '00026', 'city': 'Licenza',
+                              'location': {'type': 'Point', 'coordinates': ['12.90044', '42.07451']},
+                              'description': '00026 Licenza'},
+         'IT_00027_Roviano': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'ddd79b8a71daeea7a863674556fdc07b',
+                              'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                              'postcode': '00027', 'city': 'Roviano',
+                              'location': {'type': 'Point', 'coordinates': ['12.9944', '42.02631']},
+                              'description': '00027 Roviano'},
+         'IT_00028_Subiaco': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'a006fcf1d1a756168439393a59002120',
+                              'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                              'postcode': '00028', 'city': 'Subiaco',
+                              'location': {'type': 'Point', 'coordinates': ['13.09276', '41.92532']},
+                              'description': '00028 Subiaco'},
+         'IT_00029_Vicovaro': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': '71682d7833761acd664cc46c463fae6f',
+                               'country': 'IT', 'province': 'RM', 'provinceDescription': 'Roma', 'region': 'Lazio',
+                               'postcode': '00029', 'city': 'Vicovaro',
+                               'location': {'type': 'Point', 'coordinates': ['12.89591', '42.01614']},
+                               'description': '00029 Vicovaro'},
+         'IT_20002_Ossona': {'updated': '2021-05-27T00:23:38.2459084Z', 'id': 'ad013f64467d839447214b5a29b901a3',
+                             'country': 'IT', 'province': 'MI', 'provinceDescription': 'Milano', 'region': 'Lombardia',
+                             'postcode': '20002', 'city': 'Ossona',
+                             'location': {'type': 'Point', 'coordinates': ['8.90145', '45.50617']},
+                             'description': '20002 Ossona'}}
+        cushy_post_integration.shipping["packages"][0]["hash"] = "HASH"
+        cushy_post_integration.shipping["packages"][1]["hash"] = "HASH"
+        current_dict_image = cushy_post_integration.get_dict()
+        logging.info(current_dict_image)
+        new_cushy_post_integration_dict = CushyPostIntegration("TEST", "TEMP")
+        new_cushy_post_integration_dict.parse_from_dict(current_dict_image)
+        new_cushy_post_integration_str = CushyPostIntegration("TEST", "TEMP")
+        new_cushy_post_integration_str.parse_from_str(str(cushy_post_integration))
+        self.assertEqual(new_cushy_post_integration_dict, new_cushy_post_integration_str)
+        self.assertEqual(new_cushy_post_integration_dict, cushy_post_integration)
+        self.assertDictEqual(current_dict_image, {
+            "classConfig": {
+                "environment": "TEST",
+                "app": "NEW_APP",
+                "domain": "https://test.api.cushypost.com",
+                "token": "X-Cushypost-JWT_LOGIN",
+                "refresh_token": "X-Cushypost-Refresh-JWT_REFRESH"
+            },
+            "from_location": {
+                "administrative_area_level_1": "Lazio",
+                "administrative_area_level_2": "RM",
+                "city": "Vivaro Romano",
+                "contact": "",
+                "country": "IT",
+                "email": "",
+                "hash": "b9b645b94641103026828a421dec14ce",
+                "locality": "Vivaro Romano",
+                "location": {
+                    "lat": "42.09882",
+                    "lng": "13.00659",
+                    "location_type": "APPROXIMATE"
+                },
+                "name": "from",
+                "phone": "",
+                "postalcode": "00020",
+                "province": "RM",
+                "type": "geodb",
+                "validity": {
+                    "component": "postalcode",
+                    "valid": True
+                }
+            },
+            "to_location": {
+                "administrative_area_level_1": "Lazio",
+                "administrative_area_level_2": "RM",
+                "city": "Subiaco",
+                "contact": "",
+                "country": "IT",
+                "email": "",
+                "hash": "a006fcf1d1a756168439393a59002120",
+                "locality": "Subiaco",
+                "location": {
+                    "lat": "41.92532",
+                    "lng": "13.09276",
+                    "location_type": "APPROXIMATE"
+                },
+                "name": "to",
+                "phone": "",
+                "postalcode": "00028",
+                "province": "RM",
+                "type": "geodb",
+                "validity": {
+                    "component": "postalcode",
+                    "valid": True
+                }
+            },
+            "services": {
+                "cash_on_delivery": {
+                    "currency": "EUR",
+                    "value": 0
+                },
+                "collection": {
+                    "date": "2021-10-06T15:31:51Z",
+                    "hours": [
+                        10,
+                        14
+                    ]
+                },
+                "insurance": {
+                    "algorithm": "none",
+                    "currency": "EUR",
+                    "value": 0
+                }
+            },
+            "shipping": {
+                "total_weight": 20,
+                "goods_desc": "content",
+                "product": "All",
+                "special_instructions": "Questo è solo un test. Si prega di cancellare!",
+                "packages": [
+                    {
+                        "type": "Parcel",
+                        "height": "10",
+                        "width": "10",
+                        "length": "10",
+                        "weight": "10",
+                        "content": "content",
+                        "hash": "HASH"
+                    },
+                    {
+                        "type": "Pallet",
+                        "height": "10",
+                        "width": "10",
+                        "length": "10",
+                        "weight": "10",
+                        "content": "content",
+                        "hash": "HASH"
+                    }
+                ]
+            },
+            "geo_db_data": {
+                "IT_00020_Agosta": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "7e8ccb1698bb2a6f7a9dfcac0892c61f",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Agosta",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.03128",
+                            "41.98044"
+                        ]
+                    },
+                    "description": "00020 Agosta"
+                },
+                "IT_00020_Arcinazzo Romano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "ba21e9f6013d6d97b4fa6f64939bef06",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Arcinazzo Romano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.11351",
+                            "41.88062"
+                        ]
+                    },
+                    "description": "00020 Arcinazzo Romano"
+                },
+                "IT_00020_Camerata Nuova": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "54f9d1f2d34c1c20bcc9bcef22ef30fe",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Camerata Nuova",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.10799",
+                            "42.0189"
+                        ]
+                    },
+                    "description": "00020 Camerata Nuova"
+                },
+                "IT_00020_Canterano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "7fc951747d68f00eca61d87c45f6b01e",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Canterano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.03556",
+                            "41.94264"
+                        ]
+                    },
+                    "description": "00020 Canterano"
+                },
+                "IT_00020_Cerreto Laziale": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "acb7f46dbbeb895881ac7f4024676e71",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Cerreto Laziale",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.98235",
+                            "41.94176"
+                        ]
+                    },
+                    "description": "00020 Cerreto Laziale"
+                },
+                "IT_00020_Cervara di Roma": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "ba61abfbeeeb362a50eaf4e96b3a4c50",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Cervara di Roma",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.06809",
+                            "41.98782"
+                        ]
+                    },
+                    "description": "00020 Cervara di Roma"
+                },
+                "IT_00020_Ciciliano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "57a536516180422b041ed562fb67690a",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Ciciliano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.94025",
+                            "41.95968"
+                        ]
+                    },
+                    "description": "00020 Ciciliano"
+                },
+                "IT_00020_Cineto Romano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "b5e9b6bb4c6eae7303e18aabd2aadb3b",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Cineto Romano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.96173",
+                            "42.04938"
+                        ]
+                    },
+                    "description": "00020 Cineto Romano"
+                },
+                "IT_00020_Jenne": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "9a05c697ce5c7a5fcc516f5b46d9e941",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Jenne",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.17022",
+                            "41.88807"
+                        ]
+                    },
+                    "description": "00020 Jenne"
+                },
+                "IT_00020_Mandela": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "70fcbc2e19b66e1b08133bb716c1d442",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Mandela",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.92258",
+                            "42.02865"
+                        ]
+                    },
+                    "description": "00020 Mandela"
+                },
+                "IT_00020_Marano Equo": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "4f87468146d6245870dd46a168b6b84e",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Marano Equo",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.01495",
+                            "41.99239"
+                        ]
+                    },
+                    "description": "00020 Marano Equo"
+                },
+                "IT_00020_Percile": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "e4a15049b9a7fb915a2caa90c3f2b071",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Percile",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.90777",
+                            "42.09578"
+                        ]
+                    },
+                    "description": "00020 Percile"
+                },
+                "IT_00020_Pisoniano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "c3f1c23cb402ef04b8beea47c2c4c968",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Pisoniano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.96029",
+                            "41.90715"
+                        ]
+                    },
+                    "description": "00020 Pisoniano"
+                },
+                "IT_00020_Riofreddo": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "9c1f47f8d7158d09003bfe5f9b3ee942",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Riofreddo",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.99997",
+                            "42.06159"
+                        ]
+                    },
+                    "description": "00020 Riofreddo"
+                },
+                "IT_00020_Rocca Canterano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "6eec352b6dfe2cdd80fccd43fbf9a4b6",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Rocca Canterano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.02223",
+                            "41.95566"
+                        ]
+                    },
+                    "description": "00020 Rocca Canterano"
+                },
+                "IT_00020_Roccagiovine": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "c4b4fea600cc34e094c7762e40deb8ea",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Roccagiovine",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.89943",
+                            "42.05017"
+                        ]
+                    },
+                    "description": "00020 Roccagiovine"
+                },
+                "IT_00020_Sambuci": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "59ed25456ff084c83ab1d9f53d4750f5",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Sambuci",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.93573",
+                            "41.98435"
+                        ]
+                    },
+                    "description": "00020 Sambuci"
+                },
+                "IT_00020_Saracinesco": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "2121c861a3612cdfd50ba316d154bee6",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Saracinesco",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.95282",
+                            "42.00316"
+                        ]
+                    },
+                    "description": "00020 Saracinesco"
+                },
+                "IT_00020_Vallepietra": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "fbf21528be30ee593ff3de0351a1ad4e",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Vallepietra",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.23058",
+                            "41.92543"
+                        ]
+                    },
+                    "description": "00020 Vallepietra"
+                },
+                "IT_00020_Vallinfreda": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "004839129ae3ee332d3fb5d61c640c31",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Vallinfreda",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.99502",
+                            "42.08471"
+                        ]
+                    },
+                    "description": "00020 Vallinfreda"
+                },
+                "IT_00020_Vivaro Romano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "b9b645b94641103026828a421dec14ce",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00020",
+                    "city": "Vivaro Romano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.00659",
+                            "42.09882"
+                        ]
+                    },
+                    "description": "00020 Vivaro Romano"
+                },
+                "IT_00021_Affile": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "372f708cbb6c26a7997b5087ba9d03f4",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00021",
+                    "city": "Affile",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.10203",
+                            "41.88488"
+                        ]
+                    },
+                    "description": "00021 Affile"
+                },
+                "IT_00022_Anticoli Corrado": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "8d77a776ae1dd6c4fcc4983457afb87a",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00022",
+                    "city": "Anticoli Corrado",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.98905",
+                            "42.01061"
+                        ]
+                    },
+                    "description": "00022 Anticoli Corrado"
+                },
+                "IT_00023_Arsoli": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "d731b84e9a52e8049b0d6182f4ef7468",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00023",
+                    "city": "Arsoli",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.01609",
+                            "42.04069"
+                        ]
+                    },
+                    "description": "00023 Arsoli"
+                },
+                "IT_00024_Castel Madama": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "8a287f982b3452a02af523c697826fe4",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00024",
+                    "city": "Castel Madama",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.86566",
+                            "41.9742"
+                        ]
+                    },
+                    "description": "00024 Castel Madama"
+                },
+                "IT_00025_Gerano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "0a14f3b18799df30fd7a4fd3a8642ee7",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00025",
+                    "city": "Gerano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.99504",
+                            "41.93303"
+                        ]
+                    },
+                    "description": "00025 Gerano"
+                },
+                "IT_00026_Licenza": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "3c8ff61bfe378981666a4fc7afe5eb5d",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00026",
+                    "city": "Licenza",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.90044",
+                            "42.07451"
+                        ]
+                    },
+                    "description": "00026 Licenza"
+                },
+                "IT_00027_Roviano": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "ddd79b8a71daeea7a863674556fdc07b",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00027",
+                    "city": "Roviano",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.9944",
+                            "42.02631"
+                        ]
+                    },
+                    "description": "00027 Roviano"
+                },
+                "IT_00028_Subiaco": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "a006fcf1d1a756168439393a59002120",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00028",
+                    "city": "Subiaco",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "13.09276",
+                            "41.92532"
+                        ]
+                    },
+                    "description": "00028 Subiaco"
+                },
+                "IT_00029_Vicovaro": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "71682d7833761acd664cc46c463fae6f",
+                    "country": "IT",
+                    "province": "RM",
+                    "provinceDescription": "Roma",
+                    "region": "Lazio",
+                    "postcode": "00029",
+                    "city": "Vicovaro",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "12.89591",
+                            "42.01614"
+                        ]
+                    },
+                    "description": "00029 Vicovaro"
+                },
+                "IT_20002_Ossona": {
+                    "updated": "2021-05-27T00:23:38.2459084Z",
+                    "id": "ad013f64467d839447214b5a29b901a3",
+                    "country": "IT",
+                    "province": "MI",
+                    "provinceDescription": "Milano",
+                    "region": "Lombardia",
+                    "postcode": "20002",
+                    "city": "Ossona",
+                    "location": {
+                        "type": "Point",
+                        "coordinates": [
+                            "8.90145",
+                            "45.50617"
+                        ]
+                    },
+                    "description": "20002 Ossona"
+                }
+            }
+        })
