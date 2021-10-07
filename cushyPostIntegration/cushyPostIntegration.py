@@ -314,11 +314,13 @@ class CushyPostIntegration:
         self.from_location["phone"] = from_extra_data["phone"]
         self.from_location["email"] = from_extra_data["email"]
         self.from_location["address"] = from_extra_data["address"]
+        self.from_location["city"] = from_extra_data.get("city", self.from_location["city"])
         self.from_location["administrative_area_level_3"] = self.from_location["city"]
         self.to_location["name"] = to_extra_data["name"]
         self.to_location["phone"] = to_extra_data.get("phone", self.from_location["phone"])
         self.to_location["email"] = to_extra_data.get("email", self.from_location["email"])
         self.to_location["address"] = to_extra_data["address"]
+        self.from_location["city"] = from_extra_data.get("city", self.from_location["city"])
         self.to_location["administrative_area_level_3"] = self.to_location["city"]
         if shipping_extra_data:
             if shipping_extra_data.get("packages") and isinstance(shipping_extra_data["packages"], dict):
@@ -345,7 +347,7 @@ class CushyPostIntegration:
                                                      "quotation/approve",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
-            raise Exception("SHIPPING RATE FAILED")
+            raise Exception("APPROVE RATE FAILED")
         return response.json()["response"]["data"]
 
     def __get_domain(self):
