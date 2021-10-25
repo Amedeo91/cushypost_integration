@@ -3,6 +3,8 @@ from cushyPostIntegration import CushyPostIntegration
 import json
 import responses
 import logging
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -2083,3 +2085,24 @@ class TestCushyPostIntegration(unittest.TestCase):
         request_sent["order"]["shipping"]["packages"][0]["hash"] = "HASH"
         request_sent["order"]["shipping"]["packages"][1]["hash"] = "HASH"
         self.assertDictEqual(request_sent, {'app': 'NEW_APP', 'as': 'WaitingForPayment', 'quotation_id': '61571df49361ef4712506e42', 'order': {'quotation': '61571df49361ef4712506e42', 'from': {'administrative_area_level_1': 'Lazio', 'administrative_area_level_2': 'RM', 'city': 'Vivaro Romano', 'contact': '', 'country': 'IT', 'email': 'ottaviano.augusto@yopmail.com', 'hash': 'b9b645b94641103026828a421dec14ce', 'locality': 'Vivaro Romano', 'location': {'lat': '42.09882', 'lng': '13.00659', 'location_type': 'APPROXIMATE'}, 'name': 'GIULIO CESARE OTTAVIANO AUGUSTO', 'phone': '0000000', 'postalcode': '00020', 'province': 'RM', 'type': 'geodb', 'validity': {'component': 'postalcode', 'valid': True}, 'address': 'Via dei Fori Imperiali, 100', 'administrative_area_level_3': 'Vivaro Romano'}, 'to': {'administrative_area_level_1': 'Lazio', 'administrative_area_level_2': 'RM', 'city': 'Subiaco', 'contact': '', 'country': 'IT', 'email': 'marco.antonio@yopmail.com', 'hash': 'a006fcf1d1a756168439393a59002120', 'locality': 'Subiaco', 'location': {'lat': '41.92532', 'lng': '13.09276', 'location_type': 'APPROXIMATE'}, 'name': 'MARCO ANTONIO', 'phone': '0000000', 'postalcode': '00028', 'province': 'RM', 'type': 'geodb', 'validity': {'component': 'postalcode', 'valid': True}, 'address': 'Via de Il Cairo, 100', 'administrative_area_level_3': 'Subiaco'}, 'shipping': {'total_weight': 20, 'goods_desc': 'VENI, VIDI, VICI', 'product': 'All', 'special_instructions': 'Questo è solo un test. Si prega di cancellare!', 'packages': [{'type': 'Parcel', 'height': '10', 'width': '10', 'length': '10', 'weight': '10', 'content': 'CAVE CANEM', 'hash': 'HASH'}, {'type': 'Pallet', 'height': '10', 'width': '10', 'length': '10', 'weight': '10', 'content': 'content', 'hash': 'HASH'}]}, 'services': {'cash_on_delivery': {'currency': 'EUR', 'value': 0}, 'collection': {'date': '2021-10-06T15:31:51Z', 'hours': [10, 14]}, 'insurance': {'algorithm': 'none', 'currency': 'EUR', 'value': 0}}}})
+
+    @responses.activate
+    def test_search_quotation_to_pay(self):
+        with open("{}/test_data/shipment_search.json".format(dir_path), 'r') as file:
+            file_content = file.read()
+            cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+            cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+            cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+            responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                          json=json.loads(file_content),
+                          status=200)
+            responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                          json=json.loads(file_content),
+                          status=200)
+            cushy_post_integration.search_quotation_to_pay()
+            cushy_post_integration.search_quotation_to_pay(page=1)
+            self.assertEqual(len(responses.calls), 2)
+            request_sent = json.loads(responses.calls[0].request.body)
+            self.assertEqual(request_sent["skip"], 0)
+            request_sent = json.loads(responses.calls[1].request.body)
+            self.assertEqual(request_sent["skip"], 10)

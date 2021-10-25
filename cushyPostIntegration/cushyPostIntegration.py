@@ -350,6 +350,36 @@ class CushyPostIntegration:
             raise Exception("APPROVE RATE FAILED")
         return response.json()["response"]["data"]
 
+    @logger
+    def search_quotation_to_pay(self, page=None):
+        """
+
+        :param page: (optional) the endpoint has pagination
+        :return:
+        """
+        if not page:
+            page = 0
+        request_body = {
+            "app": self.app,
+            "limit": 10,
+            "skip": page*10,
+            "sort": {
+                "services.collection.date": -1
+            },
+            "filter": {
+                "status.current.value": {
+                    "$in": ["WaitingForPayment", "PaymentInitiated"]
+                }
+            }
+        }
+
+        response = self.__call_endpoint_with_refresh("POST",
+                                                     "shipment/search",
+                                                     data=json.dumps(request_body))
+        if response.status_code != 200:
+            raise Exception("APPROVE RATE FAILED")
+        return response.json()["response"]["data"]
+
     def __get_domain(self):
         if self.environment == "TEST":
             return "https://test.api.cushypost.com"
