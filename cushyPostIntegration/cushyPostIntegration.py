@@ -24,6 +24,7 @@ class CushyPostIntegration:
         self.to_location = None
         self.services = None
         self.shipping = None
+        self.checkout_session_id = None
         self.geo_db_data = {}
 
     @logger
@@ -399,7 +400,7 @@ class CushyPostIntegration:
     def add_shipping_ids_to_cart(self, shipping_ids):
         for shipping_id in shipping_ids:
             request_body = {
-                "app": "InOne",
+                "app": self.app,
                 "type": "shipment",
                 "id": shipping_id
             }
@@ -414,7 +415,7 @@ class CushyPostIntegration:
     def remove_shipping_ids_to_cart(self, shipping_ids, raise_error=True):
         for shipping_id in shipping_ids:
             request_body = {
-                "app": "InOne",
+                "app": self.app,
                 "id": shipping_id
             }
             response = self.__call_endpoint_with_refresh("DELETE",
@@ -422,6 +423,22 @@ class CushyPostIntegration:
                                                          params=request_body)
             if response.status_code != 200 and raise_error:
                 raise Exception("REMOVE FROM CART FAILED")
+
+    @logger
+    def buy_cart(self, success_url, cancel_url, description):
+        request_body = {
+            "app": self.app,
+            "success_url": success_url,
+            "cancel_url": cancel_url,
+            "description": description
+        }
+        response = self.__call_endpoint_with_refresh("POST",
+                                                     "cart/buy",
+                                                     data=json.dumps(request_body))
+        if response.status_code != 200:
+            raise Exception("BUY CART FAILED")
+        self.checkout_session_id = response.json()["response"]["data"]["id"]
+        return response.json()["response"]["data"]["url"]
 
     def __get_domain(self):
         if self.environment == "TEST":
@@ -444,10 +461,11 @@ class CushyPostIntegration:
         self.to_location = class_dict_image.get("to_location")
         self.services = class_dict_image.get("services")
         self.shipping = class_dict_image.get("shipping")
+        self.checkout_session_id = class_dict_image.get("checkout_session_id")
         self.geo_db_data = class_dict_image.get("geo_db_data", {})
 
     def get_dict(self):
-        return {
+        class_dictionary = {
             "classConfig": {
                 "environment": self.environment,
                 "app": self.app,
@@ -461,6 +479,9 @@ class CushyPostIntegration:
             "shipping": self.shipping,
             "geo_db_data": self.geo_db_data
         }
+        if self.checkout_session_id:
+            class_dictionary["checkout_session_id"] = self.checkout_session_id
+        return class_dictionary
 
     def __get_string(self):
         return json.dumps(self.get_dict())

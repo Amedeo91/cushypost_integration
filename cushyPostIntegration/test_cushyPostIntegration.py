@@ -2166,11 +2166,11 @@ class TestCushyPostIntegration(unittest.TestCase):
                                                          "615e29d02a562c5ad47e5792788",
                                                          "615e29d02a562c5ad47e5792787"])
         request_sent = json.loads(responses.calls[0].request.body)
-        self.assertDictEqual(request_sent, {"app": "InOne", "type": "shipment", "id": "615e29d02a562c5ad47e5792789"})
+        self.assertDictEqual(request_sent, {"app": "NEW_APP", "type": "shipment", "id": "615e29d02a562c5ad47e5792789"})
         request_sent = json.loads(responses.calls[1].request.body)
-        self.assertDictEqual(request_sent, {"app": "InOne", "type": "shipment", "id": "615e29d02a562c5ad47e5792788"})
+        self.assertDictEqual(request_sent, {"app": "NEW_APP", "type": "shipment", "id": "615e29d02a562c5ad47e5792788"})
         request_sent = json.loads(responses.calls[2].request.body)
-        self.assertDictEqual(request_sent, {"app": "InOne", "type": "shipment", "id": "615e29d02a562c5ad47e5792787"})
+        self.assertDictEqual(request_sent, {"app": "NEW_APP", "type": "shipment", "id": "615e29d02a562c5ad47e5792787"})
         self.assertEqual(len(responses.calls), 3)
 
     @responses.activate
@@ -2212,8 +2212,27 @@ class TestCushyPostIntegration(unittest.TestCase):
             raise Exception("REMOVE FROM CART FAILED - TEST FAILED")
         except Exception as error:
             self.assertEqual(str(error), "REMOVE FROM CART FAILED")
-        self.assertDictEqual(responses.calls[3].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792789'})
-        self.assertDictEqual(responses.calls[4].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792788'})
-        self.assertDictEqual(responses.calls[5].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792787'})
-        self.assertDictEqual(responses.calls[6].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792789'})
+        self.assertDictEqual(responses.calls[3].request.params, {'app': 'NEW_APP', 'id': '615e29d02a562c5ad47e5792789'})
+        self.assertDictEqual(responses.calls[4].request.params, {'app': 'NEW_APP', 'id': '615e29d02a562c5ad47e5792788'})
+        self.assertDictEqual(responses.calls[5].request.params, {'app': 'NEW_APP', 'id': '615e29d02a562c5ad47e5792787'})
+        self.assertDictEqual(responses.calls[6].request.params, {'app': 'NEW_APP', 'id': '615e29d02a562c5ad47e5792789'})
         self.assertEqual(len(responses.calls), 7)
+
+    @responses.activate
+    def test_buy_cart(self):
+        expected_object = {'checkout_session_id': 'cs_test_a1BpxUDYZmbZ3Yk5Bk9JisbT2kviPzGRGWmvI8Rv2R1L4vdaVXTW2Wbn8W', 'classConfig': {'app': 'NEW_APP', 'domain': 'https://test.api.cushypost.com', 'environment': 'TEST', 'refresh_token': 'X-Cushypost-Refresh-JWT_REFRESH', 'token': 'X-Cushypost-JWT_LOGIN'}, 'from_location': None, 'geo_db_data': {}, 'services': None, 'shipping': None, 'to_location': None}
+        with open("{}/test_data/buy_cart_response.json".format(dir_path), 'r') as file:
+            cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+            cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+            cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+            responses.add(responses.POST, "{}/cart/buy".format(cushy_post_integration.domain),
+                          json=json.load(file),
+                          status=200)
+            url = cushy_post_integration.buy_cart("success_url", "cancel_url", "description")
+            self.assertEqual(url, "https://checkout.stripe.com/pay/cs_test_a1BpxUDYZmbZ3Yk5Bk9JisbT2kviPzGRGWmvI8Rv2R1L4vdaVXTW2Wbn8W#fidkdWxOYHwnPyd1blpxYHZxWjNyQUZ8fVJLT19vbX9oTlw0PHZ2aElubDU1RHVUUm1gPDQnKSdjd2poVmB3c2B3Jz9xd3BgKSdpZHxqcHFRfHVgJz8ndmxrYmlgWmxxYGgnKSdga2RnaWBVaWRmYG1qaWFgd3YnP3F3cGB4JSUl")
+            self.assertDictEqual(cushy_post_integration.get_dict(), expected_object)
+            expected_object["checkout_session_id"] = "1234"
+            cushy_post_integration.parse_from_dict(expected_object)
+            self.assertDictEqual(cushy_post_integration.get_dict(), expected_object)
+            request_sent = json.loads(responses.calls[0].request.body)
+            self.assertDictEqual(request_sent, {"app": "NEW_APP", "success_url": "success_url", "cancel_url": "cancel_url", "description": "description"})

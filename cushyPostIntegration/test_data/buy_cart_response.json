@@ -1,0 +1,70 @@
+{
+    "response": {
+        "succeed": true,
+        "errcode": 200,
+        "errmsg": null,
+        "error": null,
+        "data": {
+            "id": "cs_test_a1BpxUDYZmbZ3Yk5Bk9JisbT2kviPzGRGWmvI8Rv2R1L4vdaVXTW2Wbn8W",
+            "object": "checkout.session",
+            "after_expiration": null,
+            "allow_promotion_codes": null,
+            "amount_subtotal": 2485,
+            "amount_total": 2485,
+            "automatic_tax": {
+                "enabled": false,
+                "status": null
+            },
+            "billing_address_collection": null,
+            "cancel_url": "https://test.dashboard.cushypost.com/shipments?canceled=true#tab=to-be-paid",
+            "client_reference_id": "615e2a8dd8bb70ab2543baca",
+            "consent": null,
+            "consent_collection": null,
+            "currency": "eur",
+            "customer": null,
+            "customer_details": {
+                "email": "cagefa5348@bio123.net",
+                "tax_exempt": "none",
+                "tax_ids": null
+            },
+            "customer_email": "cagefa5348@bio123.net",
+            "display_items": [
+                {
+                    "amount": 2485,
+                    "currency": "eur",
+                    "custom": {
+                        "description": "Prenotazione spedizioni Cushypost",
+                        "images": null,
+                        "name": "Ref: 615e2a8dd8bb70ab2543baca"
+                    },
+                    "quantity": 1,
+                    "type": "custom"
+                }
+            ],
+            "expires_at": 1633684788,
+            "livemode": false,
+            "locale": null,
+            "metadata": [],
+            "mode": "payment",
+            "payment_intent": "pi_3JhslUA8y8E9BGwj1JpS2Yq8",
+            "payment_method_options": [],
+            "payment_method_types": [
+                "card"
+            ],
+            "payment_status": "unpaid",
+            "recovered_from": null,
+            "setup_intent": null,
+            "shipping": null,
+            "shipping_address_collection": null,
+            "submit_type": "pay",
+            "subscription": null,
+            "success_url": "https://test.dashboard.cushypost.com/shipments#tab=to-be-paid?session_id={CHECKOUT_SESSION_ID}",
+            "total_details": {
+                "amount_discount": 0,
+                "amount_shipping": 0,
+                "amount_tax": 0
+            },
+            "url": "https://checkout.stripe.com/pay/cs_test_a1BpxUDYZmbZ3Yk5Bk9JisbT2kviPzGRGWmvI8Rv2R1L4vdaVXTW2Wbn8W#fidkdWxOYHwnPyd1blpxYHZxWjNyQUZ8fVJLT19vbX9oTlw0PHZ2aElubDU1RHVUUm1gPDQnKSdjd2poVmB3c2B3Jz9xd3BgKSdpZHxqcHFRfHVgJz8ndmxrYmlgWmxxYGgnKSdga2RnaWBVaWRmYG1qaWFgd3YnP3F3cGB4JSUl"
+        }
+    }
+}
