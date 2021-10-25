@@ -353,6 +353,42 @@ class CushyPostIntegration:
         return response.json()["response"]["data"]
 
     @logger
+    def search_paid_shipping(self, page=None):
+        """
+
+        :param page: (optional) the endpoint has pagination
+        :return:
+        """
+        if page is None:
+            page = 0
+        request_body = {
+            "app": self.app,
+            "limit": 10,
+            "skip": page*10,
+            "sort": {
+                "services.collection.date": -1
+            },
+            "filter": {
+                "status.current.value": {
+                    "$nin": ["WaitingForPayment", "PaymentInitiated", "Draft", "Archived"]
+                }
+            },
+            "match": {
+                "status.current.value": {
+                    "$nin": ["WaitingForPayment", "PaymentInitiated", "Draft", "Archived"]
+                }
+            },
+            "inspect": False
+        }
+
+        response = self.__call_endpoint_with_refresh("POST",
+                                                     "shipment/search",
+                                                     data=json.dumps(request_body))
+        if response.status_code != 200:
+            raise Exception("SEARCH PAID SHIPMENTS FAILED")
+        return response.json()["response"]["data"]
+
+    @logger
     def search_quotation_to_pay(self, page=None):
         """
 
@@ -384,6 +420,13 @@ class CushyPostIntegration:
 
     @logger
     def search_by_quotation_id(self, quotation_ids, page=None, shipments=None):
+        """
+
+        :param quotation_ids: quotation to get
+        :param page: (optional) page to start to search
+        :param shipments: (optional) list to start to build
+        :return:
+        """
         page = 0 if page is None else page
         response_data = self.search_quotation_to_pay(page)
         if len(response_data.get("items", [])) == 0:
@@ -398,6 +441,11 @@ class CushyPostIntegration:
 
     @logger
     def add_shipping_ids_to_cart(self, shipping_ids):
+        """
+
+        :param shipping_ids: Shipping ids to add
+        :return:
+        """
         for shipping_id in shipping_ids:
             request_body = {
                 "app": self.app,
@@ -413,6 +461,12 @@ class CushyPostIntegration:
 
     @logger
     def remove_shipping_ids_to_cart(self, shipping_ids, raise_error=True):
+        """
+
+        :param shipping_ids: Shipping ids to remove
+        :param raise_error: (optional) continue removing without raising error
+        :return:
+        """
         for shipping_id in shipping_ids:
             request_body = {
                 "app": self.app,
@@ -426,6 +480,13 @@ class CushyPostIntegration:
 
     @logger
     def buy_cart(self, success_url, cancel_url, description):
+        """
+
+        :param success_url: Page to come back after payment
+        :param cancel_url: Page to come back if payment is cancelled
+        :param description: Description on the payment page
+        :return:
+        """
         request_body = {
             "app": self.app,
             "success_url": success_url,
@@ -442,6 +503,10 @@ class CushyPostIntegration:
 
     @logger
     def confirm_cart(self):
+        """
+
+        :return:
+        """
         if not self.checkout_session_id:
             raise Exception("CONFIRM CART FAILED - MISSING PARAMETERS")
         request_body = {
@@ -455,7 +520,31 @@ class CushyPostIntegration:
             raise Exception("CONFIRM CART FAILED")
         return response.json()["response"]["data"]
 
+    @logger
+    def get_shipment_label(self, shipping_ids):
+        """
+
+        :param shipping_ids: Label to download
+        :return:
+        """
+        shipment_labels = []
+        for shipping_id in shipping_ids:
+            request_body = {
+                "app": self.app,
+                "shipment_id": shipping_id
+            }
+            response = self.__call_endpoint_with_refresh("GET",
+                                                         "shipment/label",
+                                                         params=request_body)
+            if response.status_code == 200 and response.json().get("response", {}).get("data"):
+                shipment_labels.append(response.json()["response"]["data"])
+        return shipment_labels
+
     def __get_domain(self):
+        """
+
+        :return:
+        """
         if self.environment == "TEST":
             return "https://test.api.cushypost.com"
         elif self.environment == "PRD":
@@ -464,9 +553,19 @@ class CushyPostIntegration:
             raise Exception("ENVIRONMENT NOT VALID")
 
     def parse_from_str(self, class_json_image):
+        """
+
+        :param class_json_image:
+        :return:
+        """
         self.parse_from_dict(json.loads(class_json_image))
 
     def parse_from_dict(self, class_dict_image):
+        """
+
+        :param class_dict_image:
+        :return:
+        """
         self.environment = class_dict_image.get("classConfig", {})["environment"]
         self.app = class_dict_image.get("classConfig", {})["app"]
         self.domain = self.__get_domain()
@@ -480,6 +579,10 @@ class CushyPostIntegration:
         self.geo_db_data = class_dict_image.get("geo_db_data", {})
 
     def get_dict(self):
+        """
+
+        :return:
+        """
         class_dictionary = {
             "classConfig": {
                 "environment": self.environment,
@@ -499,16 +602,32 @@ class CushyPostIntegration:
         return class_dictionary
 
     def __get_string(self):
+        """
+
+        :return:
+        """
         return json.dumps(self.get_dict())
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return self.__get_string()
 
     def __str__(self):
+        """
+
+        :return:
+        """
         return self.__get_string()
 
     def __eq__(self, other):
-        """Overrides the default implementation"""
+        """
+
+        :param other:
+        :return:
+        """
         if isinstance(other, CushyPostIntegration):
             return self.get_dict() == other.get_dict()
         return False

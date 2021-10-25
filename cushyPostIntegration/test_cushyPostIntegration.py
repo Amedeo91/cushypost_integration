@@ -2257,3 +2257,37 @@ class TestCushyPostIntegration(unittest.TestCase):
             self.assertEqual(len(responses.calls), 1)
             request_sent = json.loads(responses.calls[0].request.body)
             self.assertDictEqual(request_sent, {"app": "NEW_APP", "session_id": "1234"})
+
+    @responses.activate
+    def test_search_paid_shipping(self):
+        with open("{}/test_data/paid_shipping.json".format(dir_path), 'r') as file:
+            cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+            cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+            cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+            responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                          json=json.load(file),
+                          status=200)
+            cushy_post_integration.search_paid_shipping()
+            self.assertEqual(len(responses.calls), 1)
+            request_sent = json.loads(responses.calls[0].request.body)
+            self.assertDictEqual(request_sent, {"app": "NEW_APP", "limit": 10, "skip": 0, "sort": {"services.collection.date": -1}, "filter": {"status.current.value": {"$nin": ["WaitingForPayment", "PaymentInitiated", "Draft", "Archived"]}}, "match": {"status.current.value": {"$nin": ["WaitingForPayment", "PaymentInitiated", "Draft", "Archived"]}}, "inspect": False})
+
+    @responses.activate
+    def test_get_shipment_label(self):
+        with open("{}/test_data/shipping_label.json".format(dir_path), 'r') as file:
+            file_content_dict = json.load(file)
+            cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+            cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+            cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+            responses.add(responses.GET, "{}/shipment/label".format(cushy_post_integration.domain),
+                          json=file_content_dict,
+                          status=200)
+            responses.add(responses.GET, "{}/shipment/label".format(cushy_post_integration.domain),
+                          json=file_content_dict,
+                          status=200)
+            shipment_labels_content = cushy_post_integration.get_shipment_label(["label_1", "label_2"])
+            self.assertEqual(len(responses.calls), 2)
+            self.assertListEqual(shipment_labels_content, [file_content_dict["response"]["data"],
+                                                           file_content_dict["response"]["data"]])
+            self.assertDictEqual(responses.calls[0].request.params, {"app": "NEW_APP", "shipment_id": "label_1"})
+            self.assertDictEqual(responses.calls[1].request.params, {"app": "NEW_APP", "shipment_id": "label_2"})
