@@ -2106,3 +2106,43 @@ class TestCushyPostIntegration(unittest.TestCase):
             self.assertEqual(request_sent["skip"], 0)
             request_sent = json.loads(responses.calls[1].request.body)
             self.assertEqual(request_sent["skip"], 10)
+
+    @responses.activate
+    def test_search_by_quotation_id_many_call(self):
+        with open("{}/test_data/shipment_search.json".format(dir_path), 'r') as file_1:
+            with open("{}/test_data/shipment_search_more.json".format(dir_path), 'r') as file_2:
+                cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+                cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+                cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+                responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                              json=json.load(file_1),
+                              status=200)
+                responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                              json=json.load(file_2),
+                              status=200)
+                results = cushy_post_integration.search_by_quotation_id(["615e295bf6427c79b9749b64789"])
+                self.assertEqual(len(responses.calls), 2)
+                self.assertListEqual(results, ["615e29d02a562c5ad47e5792789"])
+
+    @responses.activate
+    def test_search_by_quotation_id_many_call_error(self):
+        with open("{}/test_data/shipment_search.json".format(dir_path), 'r') as file_1:
+            with open("{}/test_data/shipment_search_more.json".format(dir_path), 'r') as file_2:
+                with open("{}/test_data/shipment_search_error.json".format(dir_path), 'r') as file_3:
+                    cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+                    cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+                    cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+                    responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                                  json=json.load(file_1),
+                                  status=200)
+                    responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                                  json=json.load(file_2),
+                                  status=200)
+                    responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
+                                  json=json.load(file_3),
+                                  status=200)
+                    try:
+                        cushy_post_integration.search_by_quotation_id(["615e295bf6427c79b9749b647890"])
+                    except Exception as error:
+                        self.assertEqual(str(error), "NO QUOTATION FOUND")
+                    self.assertEqual(len(responses.calls), 3)

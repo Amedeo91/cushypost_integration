@@ -357,7 +357,7 @@ class CushyPostIntegration:
         :param page: (optional) the endpoint has pagination
         :return:
         """
-        if not page:
+        if page is None:
             page = 0
         request_body = {
             "app": self.app,
@@ -379,6 +379,20 @@ class CushyPostIntegration:
         if response.status_code != 200:
             raise Exception("APPROVE RATE FAILED")
         return response.json()["response"]["data"]
+
+    @logger
+    def search_by_quotation_id(self, quotation_ids, page=None, shipments=None):
+        page = 0 if page is None else page
+        response_data = self.search_quotation_to_pay(page)
+        if len(response_data.get("items", [])) == 0:
+            raise Exception("NO QUOTATION FOUND")
+        shipments = [] if shipments is None else shipments
+        shipments.extend([item["_id"]["$oid"]
+                          for item in response_data["items"] if item["quotation"]["id"] in quotation_ids])
+        if len(quotation_ids) == len(shipments):
+            return shipments
+        else:
+            return self.search_by_quotation_id(quotation_ids, page=page+1, shipments=shipments)
 
     def __get_domain(self):
         if self.environment == "TEST":

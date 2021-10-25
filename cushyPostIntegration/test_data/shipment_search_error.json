@@ -1,0 +1,14 @@
+{
+    "response": {
+        "succeed": true,
+        "errcode": 200,
+        "errmsg": null,
+        "error": null,
+        "data": {
+            "total": 0,
+            "pages": 0,
+            "page": 0,
+            "items": []
+        }
+    }
+}

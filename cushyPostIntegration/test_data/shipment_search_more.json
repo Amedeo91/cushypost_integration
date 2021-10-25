@@ -1,0 +1,1636 @@
+{
+    "response": {
+        "succeed": true,
+        "errcode": 200,
+        "errmsg": null,
+        "error": null,
+        "data": {
+            "total": 1,
+            "pages": 1,
+            "page": 0,
+            "items": [
+                {
+                    "_id": {
+                        "$oid": "615e29d02a562c5ad47e5792789"
+                    },
+                    "from": {
+                        "administrative_area_level_1": "Lazio",
+                        "administrative_area_level_2": "RM",
+                        "contact": "",
+                        "email": "mirandolo@yopmail.com",
+                        "hash": "ce87f5f5134272281994618ef300995d",
+                        "locality": "Roma",
+                        "location": {
+                            "lat": "41.8947",
+                            "lng": "12.49348",
+                            "location_type": "APPROXIMATE"
+                        },
+                        "name": "Mirandolo",
+                        "phone": "+3900150",
+                        "type": "geodb",
+                        "validity": {
+                            "component": "postalcode",
+                            "valid": true
+                        },
+                        "administrative_area_level_3": "Roma",
+                        "region": {
+                            "country": "IT",
+                            "city": "Roma",
+                            "province": "RM",
+                            "postalcode": "00150",
+                            "address": "Via Buenos Ayres, 100"
+                        },
+                        "created": {
+                            "$date": {
+                                "$numberLong": "1633561040809"
+                            }
+                        },
+                        "updated": {
+                            "$date": {
+                                "$numberLong": "1633561040809"
+                            }
+                        }
+                    },
+                    "to": {
+                        "administrative_area_level_1": "Lombardia",
+                        "administrative_area_level_2": "MI",
+                        "contact": "",
+                        "email": "mirandolo@yopmail.com",
+                        "hash": "2d1d6f81ef861cb95d452eefa5fdd6d5",
+                        "locality": "Milano",
+                        "location": {
+                            "lat": "45.46342",
+                            "lng": "9.19405",
+                            "location_type": "APPROXIMATE"
+                        },
+                        "name": "Mirandolino",
+                        "phone": "+3900150",
+                        "type": "geodb",
+                        "validity": {
+                            "component": "postalcode",
+                            "valid": true
+                        },
+                        "administrative_area_level_3": "Milano",
+                        "region": {
+                            "country": "IT",
+                            "city": "Milano",
+                            "province": "MI",
+                            "postalcode": "20150",
+                            "address": "Via Vercingetorice, 200"
+                        },
+                        "created": {
+                            "$date": {
+                                "$numberLong": "1633561040809"
+                            }
+                        },
+                        "updated": {
+                            "$date": {
+                                "$numberLong": "1633561040809"
+                            }
+                        }
+                    },
+                    "shipping": {
+                        "total_weight": 10,
+                        "goods_desc": "TUTTE COSE BELLE",
+                        "product": "Crono",
+                        "special_instructions": "Questo è solo un test. Si prega di cancellare!",
+                        "packages": [
+                            {
+                                "type": "Parcel",
+                                "height": 10,
+                                "width": 10,
+                                "length": 10,
+                                "weight": 10,
+                                "content": "content",
+                                "hash": "e97df194082d4354be1afde869c805fe"
+                            }
+                        ],
+                        "total_volume": 0.001
+                    },
+                    "services": {
+                        "cash_on_delivery": {
+                            "currency": "EUR",
+                            "value": 0
+                        },
+                        "collection": {
+                            "date": {
+                                "$date": {
+                                    "$numberLong": "1633647440000"
+                                }
+                            },
+                            "hours": [
+                                10,
+                                14
+                            ],
+                            "timestamp": 1633647318
+                        },
+                        "insurance": {
+                            "algorithm": "none",
+                            "currency": "EUR",
+                            "value": 0
+                        }
+                    },
+                    "simulate": true,
+                    "submitter": {
+                        "$oid": "61532abf6c37d841dd3fed81"
+                    },
+                    "contract": {
+                        "_id": {
+                            "$oid": "5eab2d8013078b1163681967"
+                        },
+                        "type": "shipping",
+                        "proposer": {
+                            "_id": {
+                                "$oid": "57f25d82beb0b0ec7ad44b91"
+                            },
+                            "type": "company",
+                            "name": "Carta & Penna di Carnevaletti Alessandro",
+                            "label": "C&P",
+                            "vies": "IT05277760962",
+                            "web": "https://www.misterimprese.it/lombardia/milano/milano/tipografie/376072.html",
+                            "contacts": {
+                                "administrative": {
+                                    "email": "mbe398@gmail.com",
+                                    "phone": "3281985043"
+                                }
+                            },
+                            "created": {
+                                "$date": {
+                                    "$numberLong": "1475501442484"
+                                }
+                            },
+                            "updated": {
+                                "$date": {
+                                    "$numberLong": "1475501442484"
+                                }
+                            },
+                            "perms": {
+                                "owners": [
+                                    {
+                                        "$oid": "57f25d82beb0b0ec7ad44b90"
+                                    },
+                                    {
+                                        "$oid": "57f25d82beb0b0ec7ad44b91"
+                                    }
+                                ]
+                            },
+                            "region": {
+                                "country": "IT",
+                                "postalcode": "20124",
+                                "city": "Milano",
+                                "province": "MI",
+                                "address": "Piazza Caiazzo, 3"
+                            },
+                            "apps": {
+                                "mailboxes": {
+                                    "credentials": {
+                                        "username": "mbe398@gmail.com",
+                                        "password": "@ciEpi2016",
+                                        "role": "admin"
+                                    },
+                                    "session": {
+                                        "token": {
+                                            "$oid": "597eee0d59b1f7032b266cc7"
+                                        },
+                                        "expiry": {
+                                            "$date": {
+                                                "$numberLong": "1501492504000"
+                                            }
+                                        },
+                                        "renewal": {
+                                            "$date": {
+                                                "$numberLong": "1501490881000"
+                                            }
+                                        }
+                                    }
+                                },
+                                "paypal": {
+                                    "credentials": {
+                                        "sandbox": {
+                                            "USER": "support-facilitator_api1.cushypost.com",
+                                            "PWD": "YXW8YUEG6BGD3DWZ",
+                                            "SIGNATURE": "AFcWxV21C7fd0v3bYYYRCpSSRl31A6G7n6IFgYYZdILkJJ9TnSNqxlc2"
+                                        }
+                                    }
+                                },
+                                "mailgun": {
+                                    "domain": "corrierespedizioniexpress.it",
+                                    "address": "service@corrierespedizioniexpress.it",
+                                    "alias": "Corriere Spedizioni Express"
+                                },
+                                "cushypost": {
+                                    "api": {
+                                        "credentials": {
+                                            "v": "v1",
+                                            "api_key": "x837rn983y234hnxck34lk"
+                                        }
+                                    }
+                                }
+                            },
+                            "iban": "IT 23 Q 05428 01602 000000009390"
+                        },
+                        "provider": {
+                            "_id": {
+                                "$oid": "5eab2c8f13078b1163681966"
+                            },
+                            "type": "company",
+                            "name": "Poste Italiane",
+                            "label": "PS",
+                            "vies": "IT01114601006",
+                            "web": "https://www.posteitaliane.it/",
+                            "contacts": {
+                                "administrative": {
+                                    "phone": "06 59581"
+                                },
+                                "technical": {
+                                    "phone": "06 66548702",
+                                    "email": "pierpaolo.cianca@posteitaliane.it"
+                                },
+                                "sales": [],
+                                "customers": {
+                                    "center": "-----------",
+                                    "phone": "-----------",
+                                    "fax": "06 59589100"
+                                }
+                            },
+                            "created": {
+                                "$date": {
+                                    "$numberLong": "1588280400000"
+                                }
+                            },
+                            "updated": {
+                                "$date": {
+                                    "$numberLong": "1588280400000"
+                                }
+                            },
+                            "perms": {
+                                "owners": [
+                                    {
+                                        "$oid": "57f25d82beb0b0ec7ad44b90"
+                                    },
+                                    {
+                                        "$oid": "57f25d82beb0b0ec7ad44b91"
+                                    }
+                                ]
+                            },
+                            "region": {
+                                "country": "IT",
+                                "postalcode": "00144",
+                                "city": "Roma",
+                                "province": "RM",
+                                "address": "Viale Europa, 190"
+                            },
+                            "config": {
+                                "api": {
+                                    "controller": "posteitaliane",
+                                    "version": "v1"
+                                },
+                                "domestic_countries": [
+                                    "IT"
+                                ],
+                                "trouble_rate": 0.19,
+                                "troublesome_places": [
+                                    {
+                                        "country": "IT",
+                                        "locality": "Livigno"
+                                    },
+                                    {
+                                        "country": "IT",
+                                        "locality": "Trepalle"
+                                    },
+                                    {
+                                        "country": "IT",
+                                        "locality": "Campione d'Italia"
+                                    }
+                                ],
+                                "delivery_times": [
+                                    {
+                                        "product": "Crono Express",
+                                        "span": "P2D",
+                                        "default": true
+                                    },
+                                    {
+                                        "product": "Crono",
+                                        "span": "P4D",
+                                        "default": true
+                                    },
+                                    {
+                                        "product": "Crono Reverse",
+                                        "span": "P4D",
+                                        "default": true
+                                    },
+                                    {
+                                        "product": "Crono Internazionale",
+                                        "span": "P3D",
+                                        "places": [
+                                            {
+                                                "zone": "Zona 1"
+                                            },
+                                            {
+                                                "zone": "Zona 2"
+                                            },
+                                            {
+                                                "zone": "Zona 3"
+                                            },
+                                            {
+                                                "zone": "Zona 4"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "product": "Crono Internazionale",
+                                        "span": "P5D",
+                                        "places": [
+                                            {
+                                                "zone": "Zona 5"
+                                            },
+                                            {
+                                                "zone": "Zona 6"
+                                            },
+                                            {
+                                                "zone": "Zona 7"
+                                            },
+                                            {
+                                                "zone": "Zona 8"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "product_map": {
+                                    "Crono": "P44",
+                                    "Crono Express": "P46",
+                                    "Crono Internazionale": "P48",
+                                    "Crono Economy": "P49",
+                                    "Crono Reverse": "P51",
+                                    "Crono Plus": "P52"
+                                },
+                                "international_map": [
+                                    {
+                                        "name": "Zona 1",
+                                        "countries": [
+                                            "AT",
+                                            "BE",
+                                            "DK",
+                                            "DE",
+                                            "LU",
+                                            "NL",
+                                            "PL",
+                                            "CZ",
+                                            "SK",
+                                            "SI",
+                                            "HU"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 2",
+                                        "countries": [
+                                            "FR",
+                                            "MC",
+                                            "GB",
+                                            "ES"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 3",
+                                        "countries": [
+                                            "HR",
+                                            "EE",
+                                            "FI",
+                                            "GR",
+                                            "IE",
+                                            "LV",
+                                            "LT",
+                                            "MT",
+                                            "PT",
+                                            "RO",
+                                            "SE"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 4",
+                                        "countries": [
+                                            "IS",
+                                            "LI",
+                                            "NO",
+                                            "CH"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 5",
+                                        "countries": [
+                                            "AF",
+                                            "AM",
+                                            "AZ",
+                                            "BY",
+                                            "BA",
+                                            "BG",
+                                            "CY",
+                                            "KZ",
+                                            "KG",
+                                            "MD",
+                                            "ME",
+                                            "MK",
+                                            "RS",
+                                            "TJ",
+                                            "TM",
+                                            "UA",
+                                            "UZ"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 6",
+                                        "countries": [
+                                            "AL",
+                                            "DZ",
+                                            "SA",
+                                            "BH",
+                                            "EG",
+                                            "ET",
+                                            "GH",
+                                            "JO",
+                                            "IN",
+                                            "IL",
+                                            "KW",
+                                            "LB",
+                                            "LY",
+                                            "MA",
+                                            "MR",
+                                            "NE",
+                                            "NG",
+                                            "OM",
+                                            "PK",
+                                            "PS",
+                                            "QA",
+                                            "RW",
+                                            "RU",
+                                            "SN",
+                                            "SY",
+                                            "SD",
+                                            "TN",
+                                            "TR",
+                                            "YE"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 7",
+                                        "countries": [
+                                            "AI",
+                                            "BD",
+                                            "BJ",
+                                            "BO",
+                                            "BF",
+                                            "BI",
+                                            "KH",
+                                            "CM",
+                                            "CA",
+                                            "CV",
+                                            "TD",
+                                            "CN",
+                                            "CO",
+                                            "CI",
+                                            "DM",
+                                            "AE",
+                                            "ER",
+                                            "GA",
+                                            "GM",
+                                            "GE",
+                                            "DJ",
+                                            "GN",
+                                            "GY",
+                                            "HK",
+                                            "IR",
+                                            "IQ",
+                                            "KE",
+                                            "MW",
+                                            "MY",
+                                            "MU",
+                                            "MN",
+                                            "NP",
+                                            "PR",
+                                            "CF",
+                                            "CG",
+                                            "DO",
+                                            "KN",
+                                            "SC",
+                                            "SL",
+                                            "LK",
+                                            "TW",
+                                            "TZ",
+                                            "TH",
+                                            "TG",
+                                            "TT",
+                                            "US",
+                                            "UG",
+                                            "VE",
+                                            "ZW"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zona 8",
+                                        "countries": [
+                                            "AO",
+                                            "AG",
+                                            "AN",
+                                            "AR",
+                                            "AW",
+                                            "AU",
+                                            "BS",
+                                            "BB",
+                                            "BM",
+                                            "BW",
+                                            "BR",
+                                            "BN",
+                                            "CL",
+                                            "KM",
+                                            "KR",
+                                            "CR",
+                                            "CU",
+                                            "EC",
+                                            "SV",
+                                            "FJ",
+                                            "PH",
+                                            "JM",
+                                            "JP",
+                                            "GD",
+                                            "GT",
+                                            "GN",
+                                            "GQ",
+                                            "HT",
+                                            "HN",
+                                            "ID",
+                                            "KY",
+                                            "SB",
+                                            "KI",
+                                            "LA",
+                                            "LS",
+                                            "MO",
+                                            "MG",
+                                            "MV",
+                                            "MX",
+                                            "MZ",
+                                            "MM",
+                                            "NA",
+                                            "NI",
+                                            "NC",
+                                            "NZ",
+                                            "PA",
+                                            "PG",
+                                            "PY",
+                                            "PE",
+                                            "PF",
+                                            "LC",
+                                            "VC",
+                                            "ST",
+                                            "SG",
+                                            "SR",
+                                            "SZ",
+                                            "TO",
+                                            "UY",
+                                            "VU",
+                                            "VN",
+                                            "ZM"
+                                        ]
+                                    }
+                                ],
+                                "products_limits": [
+                                    {
+                                        "products": [
+                                            "P44",
+                                            "P46",
+                                            "P51"
+                                        ],
+                                        "algorithm": "measures",
+                                        "volumetric_denominator": null,
+                                        "measures": {
+                                            "max": {
+                                                "overcharged": 100,
+                                                "allowed": 150
+                                            },
+                                            "sum": {
+                                                "overcharged": 150,
+                                                "allowed": 220
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "products": [
+                                            "P44",
+                                            "P46",
+                                            "P48",
+                                            "P51"
+                                        ],
+                                        "algorithm": "weight",
+                                        "weight": {
+                                            "max": 30
+                                        }
+                                    },
+                                    {
+                                        "products": [
+                                            "P44",
+                                            "P46",
+                                            "P51"
+                                        ],
+                                        "algorithm": "places",
+                                        "places": [
+                                            {
+                                                "country": "XX",
+                                                "province": "BI",
+                                                "locality": "Biella"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "products": [
+                                            "P48"
+                                        ],
+                                        "algorithm": "places",
+                                        "places": [
+                                            {
+                                                "country": "DZ"
+                                            },
+                                            {
+                                                "country": "AO"
+                                            },
+                                            {
+                                                "country": "BW"
+                                            },
+                                            {
+                                                "country": "BI"
+                                            },
+                                            {
+                                                "country": "CM"
+                                            },
+                                            {
+                                                "country": "CV"
+                                            },
+                                            {
+                                                "country": "CF"
+                                            },
+                                            {
+                                                "country": "TD"
+                                            },
+                                            {
+                                                "country": "CI"
+                                            },
+                                            {
+                                                "country": "ER"
+                                            },
+                                            {
+                                                "country": "ET"
+                                            },
+                                            {
+                                                "country": "GA"
+                                            },
+                                            {
+                                                "country": "LR"
+                                            },
+                                            {
+                                                "country": "MG"
+                                            },
+                                            {
+                                                "country": "MW"
+                                            },
+                                            {
+                                                "country": "ML"
+                                            },
+                                            {
+                                                "country": "MA"
+                                            },
+                                            {
+                                                "country": "MR"
+                                            },
+                                            {
+                                                "country": "MU"
+                                            },
+                                            {
+                                                "country": "MZ"
+                                            },
+                                            {
+                                                "country": "NA"
+                                            },
+                                            {
+                                                "country": "CG"
+                                            },
+                                            {
+                                                "country": "CD"
+                                            },
+                                            {
+                                                "country": "RE"
+                                            },
+                                            {
+                                                "country": "ST"
+                                            },
+                                            {
+                                                "country": "SN"
+                                            },
+                                            {
+                                                "country": "SC"
+                                            },
+                                            {
+                                                "country": "SL"
+                                            },
+                                            {
+                                                "country": "ZA"
+                                            },
+                                            {
+                                                "country": "SD"
+                                            },
+                                            {
+                                                "country": "SS"
+                                            },
+                                            {
+                                                "country": "TZ"
+                                            },
+                                            {
+                                                "country": "TG"
+                                            },
+                                            {
+                                                "country": "TN"
+                                            },
+                                            {
+                                                "country": "ZM"
+                                            },
+                                            {
+                                                "country": "ZW"
+                                            },
+                                            {
+                                                "country": "AG"
+                                            },
+                                            {
+                                                "country": "BS"
+                                            },
+                                            {
+                                                "country": "BB"
+                                            },
+                                            {
+                                                "country": "BM"
+                                            },
+                                            {
+                                                "country": "BO"
+                                            },
+                                            {
+                                                "country": "KY"
+                                            },
+                                            {
+                                                "country": "CR"
+                                            },
+                                            {
+                                                "country": "CU"
+                                            },
+                                            {
+                                                "country": "CW"
+                                            },
+                                            {
+                                                "country": "SV"
+                                            },
+                                            {
+                                                "country": "EC"
+                                            },
+                                            {
+                                                "country": "JM"
+                                            },
+                                            {
+                                                "country": "GD"
+                                            },
+                                            {
+                                                "country": "GT"
+                                            },
+                                            {
+                                                "country": "HT"
+                                            },
+                                            {
+                                                "country": "HN"
+                                            },
+                                            {
+                                                "country": "VG"
+                                            },
+                                            {
+                                                "country": "MQ"
+                                            },
+                                            {
+                                                "country": "NI"
+                                            },
+                                            {
+                                                "country": "PA"
+                                            },
+                                            {
+                                                "country": "PY"
+                                            },
+                                            {
+                                                "country": "PE"
+                                            },
+                                            {
+                                                "country": "PR"
+                                            },
+                                            {
+                                                "country": "DO"
+                                            },
+                                            {
+                                                "country": "SR"
+                                            },
+                                            {
+                                                "country": "TT"
+                                            },
+                                            {
+                                                "country": "VE"
+                                            },
+                                            {
+                                                "country": "AF"
+                                            },
+                                            {
+                                                "country": "BH"
+                                            },
+                                            {
+                                                "country": "BN"
+                                            },
+                                            {
+                                                "country": "KP"
+                                            },
+                                            {
+                                                "country": "JO"
+                                            },
+                                            {
+                                                "country": "IQ"
+                                            },
+                                            {
+                                                "country": "KW"
+                                            },
+                                            {
+                                                "country": "LA"
+                                            },
+                                            {
+                                                "country": "MV"
+                                            },
+                                            {
+                                                "country": "MN"
+                                            },
+                                            {
+                                                "country": "NP"
+                                            },
+                                            {
+                                                "country": "TJ"
+                                            },
+                                            {
+                                                "country": "TL"
+                                            },
+                                            {
+                                                "country": "TM"
+                                            },
+                                            {
+                                                "country": "FJ"
+                                            },
+                                            {
+                                                "country": "SB"
+                                            },
+                                            {
+                                                "country": "KI"
+                                            },
+                                            {
+                                                "country": "NC"
+                                            },
+                                            {
+                                                "country": "PG"
+                                            },
+                                            {
+                                                "country": "PF"
+                                            },
+                                            {
+                                                "country": "WS"
+                                            },
+                                            {
+                                                "country": "TO"
+                                            },
+                                            {
+                                                "country": "TV"
+                                            },
+                                            {
+                                                "country": "VU"
+                                            },
+                                            {
+                                                "country": "MK"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "products": [
+                                            "P44",
+                                            "P46",
+                                            "P48",
+                                            "P51"
+                                        ],
+                                        "algorithm": "places",
+                                        "places": [
+                                            {
+                                                "country": "IT",
+                                                "city": "Messina",
+                                                "province": "ME"
+                                            },
+                                            {
+                                                "country": "IT",
+                                                "postalcode": "98075",
+                                                "locality": "San Fratello"
+                                            },
+                                            {
+                                                "country": "IT",
+                                                "postalcode": "95040",
+                                                "locality": "Castel di Judica"
+                                            },
+                                            {
+                                                "country": "IT",
+                                                "postalcode": "95040",
+                                                "locality": "Ramacca"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        "created": {
+                            "$date": {
+                                "$numberLong": "1588280400000"
+                            }
+                        },
+                        "updated": {
+                            "$date": {
+                                "$numberLong": "1588280400000"
+                            }
+                        },
+                        "perms": {
+                            "owners": [
+                                {
+                                    "$oid": "57f25d82beb0b0ec7ad44b91"
+                                }
+                            ]
+                        },
+                        "since": {
+                            "$date": {
+                                "$numberLong": "1588280400000"
+                            }
+                        },
+                        "active": true,
+                        "public": true,
+                        "algorithm": {
+                            "type": "SigmaMargin",
+                            "parameters": {
+                                "gateway_cost": 0.25,
+                                "small_amount_cost": 4.5,
+                                "small_amount_price": 5.625,
+                                "large_amount_cost": 80,
+                                "large_amount_price": 101
+                            }
+                        },
+                        "credentials": {
+                            "cod_cli": "000000473204",
+                            "type": "SDA",
+                            "workstation": "10538"
+                        },
+                        "title": "Servizio di spedizione Poste Italiane offerto da Carta & Penna di Carnevaletti Alessandro",
+                        "content": "...",
+                        "config": {
+                            "available_products": {
+                                "national": [
+                                    "Crono",
+                                    "Crono Express",
+                                    "Crono Reverse"
+                                ],
+                                "international": [
+                                    "Crono Internazionale"
+                                ]
+                            },
+                            "insurance_map": {
+                                "thresholds": {
+                                    "national": {
+                                        "*": 26,
+                                        "AS01": 258.23,
+                                        "AS02": 516.46,
+                                        "AS03": 1549.37,
+                                        "AS04": 2582.28
+                                    },
+                                    "international": {
+                                        "AS14": 1500,
+                                        "AS14*": 50000
+                                    },
+                                    "costs": {
+                                        "AS01": {
+                                            "type": "fixed",
+                                            "value": 2.45
+                                        },
+                                        "AS02": {
+                                            "type": "fixed",
+                                            "value": 3.9
+                                        },
+                                        "AS03": {
+                                            "type": "fixed",
+                                            "value": 7
+                                        },
+                                        "AS04": {
+                                            "type": "fixed",
+                                            "value": 8.7
+                                        },
+                                        "AS14": {
+                                            "type": "fixed",
+                                            "value": 3
+                                        },
+                                        "AS14*": {
+                                            "type": "percentage",
+                                            "value": 0.01
+                                        }
+                                    }
+                                },
+                                "percentage": {
+                                    "type": "fixed+percentage",
+                                    "value": 0.006,
+                                    "threshold": 500,
+                                    "cost": 3.5
+                                }
+                            },
+                            "prices_map": {
+                                "Voluminous": {
+                                    "increase_percent": 1
+                                },
+                                "P44": [
+                                    {
+                                        "weight": 2,
+                                        "price": 4.5
+                                    },
+                                    {
+                                        "weight": 5,
+                                        "price": 5.45
+                                    },
+                                    {
+                                        "weight": 10,
+                                        "price": 8.05
+                                    },
+                                    {
+                                        "weight": 20,
+                                        "price": 9.7
+                                    },
+                                    {
+                                        "weight": 30,
+                                        "price": 11.9
+                                    }
+                                ],
+                                "P46": [
+                                    {
+                                        "weight": 2,
+                                        "price": 5.85
+                                    },
+                                    {
+                                        "weight": 5,
+                                        "price": 6.85
+                                    },
+                                    {
+                                        "weight": 10,
+                                        "price": 8.05
+                                    },
+                                    {
+                                        "weight": 20,
+                                        "price": 9.7
+                                    },
+                                    {
+                                        "weight": 30,
+                                        "price": 11.9
+                                    }
+                                ],
+                                "P48": [
+                                    {
+                                        "weight": 1,
+                                        "prices": {
+                                            "Zona 1": 12.65,
+                                            "Zona 2": 15.15,
+                                            "Zona 3": 16.25,
+                                            "Zona 4": 36.25,
+                                            "Zona 5": 30,
+                                            "Zona 6": 32,
+                                            "Zona 7": 34,
+                                            "Zona 8": 42
+                                        }
+                                    },
+                                    {
+                                        "weight": 2,
+                                        "prices": {
+                                            "Zona 1": 13.25,
+                                            "Zona 2": 15.9,
+                                            "Zona 3": 17.4,
+                                            "Zona 4": 37.3,
+                                            "Zona 5": 33.5,
+                                            "Zona 6": 35.1,
+                                            "Zona 7": 37.65,
+                                            "Zona 8": 47
+                                        }
+                                    },
+                                    {
+                                        "weight": 3,
+                                        "prices": {
+                                            "Zona 1": 13.95,
+                                            "Zona 2": 16.7,
+                                            "Zona 3": 18.65,
+                                            "Zona 4": 38.7,
+                                            "Zona 5": 36.6,
+                                            "Zona 6": 39.4,
+                                            "Zona 7": 42.25,
+                                            "Zona 8": 50.95
+                                        }
+                                    },
+                                    {
+                                        "weight": 4,
+                                        "prices": {
+                                            "Zona 1": 14.45,
+                                            "Zona 2": 17.25,
+                                            "Zona 3": 19.65,
+                                            "Zona 4": 39.45,
+                                            "Zona 5": 40.45,
+                                            "Zona 6": 43.4,
+                                            "Zona 7": 46.65,
+                                            "Zona 8": 55.15
+                                        }
+                                    },
+                                    {
+                                        "weight": 5,
+                                        "prices": {
+                                            "Zona 1": 14.95,
+                                            "Zona 2": 18.55,
+                                            "Zona 3": 21.45,
+                                            "Zona 4": 40.15,
+                                            "Zona 5": 44.35,
+                                            "Zona 6": 46.95,
+                                            "Zona 7": 50.75,
+                                            "Zona 8": 58.1
+                                        }
+                                    },
+                                    {
+                                        "weight": 6,
+                                        "prices": {
+                                            "Zona 1": 15.7,
+                                            "Zona 2": 19.6,
+                                            "Zona 3": 23.05,
+                                            "Zona 4": 42,
+                                            "Zona 5": 48.75,
+                                            "Zona 6": 51.8,
+                                            "Zona 7": 56,
+                                            "Zona 8": 62.95
+                                        }
+                                    },
+                                    {
+                                        "weight": 7,
+                                        "prices": {
+                                            "Zona 1": 16.2,
+                                            "Zona 2": 20.25,
+                                            "Zona 3": 24.15,
+                                            "Zona 4": 42.75,
+                                            "Zona 5": 52.3,
+                                            "Zona 6": 55.85,
+                                            "Zona 7": 59.9,
+                                            "Zona 8": 69.2
+                                        }
+                                    },
+                                    {
+                                        "weight": 8,
+                                        "prices": {
+                                            "Zona 1": 16.7,
+                                            "Zona 2": 20.85,
+                                            "Zona 3": 25.2,
+                                            "Zona 4": 43.45,
+                                            "Zona 5": 55.9,
+                                            "Zona 6": 59.85,
+                                            "Zona 7": 64.4,
+                                            "Zona 8": 75.45
+                                        }
+                                    },
+                                    {
+                                        "weight": 9,
+                                        "prices": {
+                                            "Zona 1": 17.2,
+                                            "Zona 2": 21.45,
+                                            "Zona 3": 26.25,
+                                            "Zona 4": 44.2,
+                                            "Zona 5": 59.45,
+                                            "Zona 6": 63.9,
+                                            "Zona 7": 68.45,
+                                            "Zona 8": 81.7
+                                        }
+                                    },
+                                    {
+                                        "weight": 10,
+                                        "prices": {
+                                            "Zona 1": 17.7,
+                                            "Zona 2": 22.95,
+                                            "Zona 3": 28.35,
+                                            "Zona 4": 44.9,
+                                            "Zona 5": 63.05,
+                                            "Zona 6": 67.9,
+                                            "Zona 7": 73.85,
+                                            "Zona 8": 87.95
+                                        }
+                                    },
+                                    {
+                                        "weight": 11,
+                                        "prices": {
+                                            "Zona 1": 19.25,
+                                            "Zona 2": 24.7,
+                                            "Zona 3": 31.4,
+                                            "Zona 4": 48.6,
+                                            "Zona 5": 70.45,
+                                            "Zona 6": 73.95,
+                                            "Zona 7": 79.4,
+                                            "Zona 8": 94.15
+                                        }
+                                    },
+                                    {
+                                        "weight": 12,
+                                        "prices": {
+                                            "Zona 1": 19.8,
+                                            "Zona 2": 25.35,
+                                            "Zona 3": 32.6,
+                                            "Zona 4": 49.35,
+                                            "Zona 5": 74.25,
+                                            "Zona 6": 78.05,
+                                            "Zona 7": 83.05,
+                                            "Zona 8": 100.4
+                                        }
+                                    },
+                                    {
+                                        "weight": 13,
+                                        "prices": {
+                                            "Zona 1": 20.35,
+                                            "Zona 2": 26,
+                                            "Zona 3": 33.8,
+                                            "Zona 4": 52.3,
+                                            "Zona 5": 78,
+                                            "Zona 6": 82.2,
+                                            "Zona 7": 86.7,
+                                            "Zona 8": 106.65
+                                        }
+                                    },
+                                    {
+                                        "weight": 14,
+                                        "prices": {
+                                            "Zona 1": 20.9,
+                                            "Zona 2": 26.7,
+                                            "Zona 3": 34.95,
+                                            "Zona 4": 55.35,
+                                            "Zona 5": 81.8,
+                                            "Zona 6": 86.35,
+                                            "Zona 7": 90.3,
+                                            "Zona 8": 112.9
+                                        }
+                                    },
+                                    {
+                                        "weight": 15,
+                                        "prices": {
+                                            "Zona 1": 21.4,
+                                            "Zona 2": 27.35,
+                                            "Zona 3": 36.15,
+                                            "Zona 4": 56.2,
+                                            "Zona 5": 85.6,
+                                            "Zona 6": 90.5,
+                                            "Zona 7": 93.95,
+                                            "Zona 8": 119.15
+                                        }
+                                    },
+                                    {
+                                        "weight": 16,
+                                        "prices": {
+                                            "Zona 1": 21.95,
+                                            "Zona 2": 28,
+                                            "Zona 3": 37.35,
+                                            "Zona 4": 59.3,
+                                            "Zona 5": 91.8,
+                                            "Zona 6": 96.35,
+                                            "Zona 7": 99.25,
+                                            "Zona 8": 124.3
+                                        }
+                                    },
+                                    {
+                                        "weight": 17,
+                                        "prices": {
+                                            "Zona 1": 22.5,
+                                            "Zona 2": 28.7,
+                                            "Zona 3": 38.5,
+                                            "Zona 4": 60.2,
+                                            "Zona 5": 95.7,
+                                            "Zona 6": 100.55,
+                                            "Zona 7": 104.7,
+                                            "Zona 8": 130.5
+                                        }
+                                    },
+                                    {
+                                        "weight": 18,
+                                        "prices": {
+                                            "Zona 1": 23.05,
+                                            "Zona 2": 29.35,
+                                            "Zona 3": 39.7,
+                                            "Zona 4": 63.4,
+                                            "Zona 5": 100.45,
+                                            "Zona 6": 103.8,
+                                            "Zona 7": 108.45,
+                                            "Zona 8": 137.9
+                                        }
+                                    },
+                                    {
+                                        "weight": 19,
+                                        "prices": {
+                                            "Zona 1": 23.55,
+                                            "Zona 2": 30.05,
+                                            "Zona 3": 40.85,
+                                            "Zona 4": 64.3,
+                                            "Zona 5": 104.35,
+                                            "Zona 6": 108,
+                                            "Zona 7": 112.2,
+                                            "Zona 8": 145.5
+                                        }
+                                    },
+                                    {
+                                        "weight": 20,
+                                        "prices": {
+                                            "Zona 1": 24.1,
+                                            "Zona 2": 30.7,
+                                            "Zona 3": 42.05,
+                                            "Zona 4": 66.2,
+                                            "Zona 5": 109.25,
+                                            "Zona 6": 113.15,
+                                            "Zona 7": 116.9,
+                                            "Zona 8": 151.65
+                                        }
+                                    },
+                                    {
+                                        "weight": 21,
+                                        "prices": {
+                                            "Zona 1": 25.75,
+                                            "Zona 2": 32.8,
+                                            "Zona 3": 43.25,
+                                            "Zona 4": 68.55,
+                                            "Zona 5": 114.2,
+                                            "Zona 6": 118.45,
+                                            "Zona 7": 122.7,
+                                            "Zona 8": 157.95
+                                        }
+                                    },
+                                    {
+                                        "weight": 22,
+                                        "prices": {
+                                            "Zona 1": 26.35,
+                                            "Zona 2": 33.5,
+                                            "Zona 3": 44.4,
+                                            "Zona 4": 73.5,
+                                            "Zona 5": 118.15,
+                                            "Zona 6": 122.7,
+                                            "Zona 7": 126.55,
+                                            "Zona 8": 164.25
+                                        }
+                                    },
+                                    {
+                                        "weight": 23,
+                                        "prices": {
+                                            "Zona 1": 26.9,
+                                            "Zona 2": 34.2,
+                                            "Zona 3": 45.6,
+                                            "Zona 4": 75.5,
+                                            "Zona 5": 122.15,
+                                            "Zona 6": 126.9,
+                                            "Zona 7": 132.5,
+                                            "Zona 8": 170.55
+                                        }
+                                    },
+                                    {
+                                        "weight": 24,
+                                        "prices": {
+                                            "Zona 1": 27.45,
+                                            "Zona 2": 34.9,
+                                            "Zona 3": 46.8,
+                                            "Zona 4": 79.05,
+                                            "Zona 5": 126.15,
+                                            "Zona 6": 131.15,
+                                            "Zona 7": 137.45,
+                                            "Zona 8": 176.85
+                                        }
+                                    },
+                                    {
+                                        "weight": 25,
+                                        "prices": {
+                                            "Zona 1": 28,
+                                            "Zona 2": 35.6,
+                                            "Zona 3": 47.95,
+                                            "Zona 4": 80.1,
+                                            "Zona 5": 130.15,
+                                            "Zona 6": 135.4,
+                                            "Zona 7": 142.5,
+                                            "Zona 8": 183.15
+                                        }
+                                    },
+                                    {
+                                        "weight": 26,
+                                        "prices": {
+                                            "Zona 1": 29.8,
+                                            "Zona 2": 37.85,
+                                            "Zona 3": 49.15,
+                                            "Zona 4": 81.15,
+                                            "Zona 5": 134.1,
+                                            "Zona 6": 139.65,
+                                            "Zona 7": 147.65,
+                                            "Zona 8": 189.45
+                                        }
+                                    },
+                                    {
+                                        "weight": 27,
+                                        "prices": {
+                                            "Zona 1": 30.4,
+                                            "Zona 2": 38.6,
+                                            "Zona 3": 50.35,
+                                            "Zona 4": 84.8,
+                                            "Zona 5": 138.1,
+                                            "Zona 6": 143.9,
+                                            "Zona 7": 151.65,
+                                            "Zona 8": 195.75
+                                        }
+                                    },
+                                    {
+                                        "weight": 28,
+                                        "prices": {
+                                            "Zona 1": 31,
+                                            "Zona 2": 39.3,
+                                            "Zona 3": 51.5,
+                                            "Zona 4": 85.9,
+                                            "Zona 5": 142.1,
+                                            "Zona 6": 148.15,
+                                            "Zona 7": 155.65,
+                                            "Zona 8": 202.05
+                                        }
+                                    },
+                                    {
+                                        "weight": 29,
+                                        "prices": {
+                                            "Zona 1": 31.6,
+                                            "Zona 2": 40.05,
+                                            "Zona 3": 52.7,
+                                            "Zona 4": 86.95,
+                                            "Zona 5": 146.1,
+                                            "Zona 6": 152.4,
+                                            "Zona 7": 159.65,
+                                            "Zona 8": 208.35
+                                        }
+                                    },
+                                    {
+                                        "weight": 30,
+                                        "prices": {
+                                            "Zona 1": 32.15,
+                                            "Zona 2": 40.75,
+                                            "Zona 3": 53.85,
+                                            "Zona 4": 90.8,
+                                            "Zona 5": 150.05,
+                                            "Zona 6": 156.65,
+                                            "Zona 7": 163.7,
+                                            "Zona 8": 214.65
+                                        }
+                                    }
+                                ],
+                                "P51": [
+                                    {
+                                        "weight": 2,
+                                        "price": 4.5
+                                    },
+                                    {
+                                        "weight": 5,
+                                        "price": 5.4
+                                    },
+                                    {
+                                        "weight": 10,
+                                        "price": 8
+                                    },
+                                    {
+                                        "weight": 20,
+                                        "price": 9.65
+                                    },
+                                    {
+                                        "weight": 30,
+                                        "price": 11.8
+                                    }
+                                ]
+                            },
+                            "available_insurances": {
+                                "Crono": [
+                                    "none",
+                                    "thresholds"
+                                ],
+                                "Crono Express": [
+                                    "none",
+                                    "thresholds",
+                                    "percentage"
+                                ],
+                                "Crono Reverse": [
+                                    "none"
+                                ],
+                                "Crono Internazionale": [
+                                    "none",
+                                    "thresholds"
+                                ]
+                            },
+                            "products_limits": []
+                        },
+                        "on_hold_algorithm": {
+                            "type": "ByPeriods",
+                            "parameters": {
+                                "dossier_opening": 8.8,
+                                "periods": [
+                                    {
+                                        "duration": "P3D",
+                                        "cost": 4.4
+                                    },
+                                    {
+                                        "duration": "P1D",
+                                        "cost": 0.61
+                                    }
+                                ],
+                                "redelivery": 4
+                            }
+                        }
+                    },
+                    "quotation": {
+                        "id": "615e295bf6427c79b9749b64789",
+                        "currency": "EUR",
+                        "date": {
+                            "$date": {
+                                "$numberLong": "1633560924572"
+                            }
+                        },
+                        "item": {
+                            "id": {
+                                "$oid": "615e295bf6427c79b9749b64"
+                            },
+                            "call": "615e295a51603",
+                            "label": "PS",
+                            "product": "Crono",
+                            "delivery_time": "P4D",
+                            "cost": 8.05,
+                            "details": {
+                                "insurance_algorithm": "none"
+                            },
+                            "currency": "EUR",
+                            "contract": {
+                                "$oid": "5eab2d8013078b1163681967"
+                            },
+                            "disabled": false,
+                            "vat_rate": 1.22,
+                            "vat": 2.27,
+                            "net_price": 10.31,
+                            "price": 12.58,
+                            "trouble_rate": 0.19
+                        }
+                    },
+                    "created": {
+                        "$date": {
+                            "$numberLong": "1633561040809"
+                        }
+                    },
+                    "updated": {
+                        "$date": {
+                            "$numberLong": "1633561040809"
+                        }
+                    },
+                    "delivery": {
+                        "status": {
+                            "current": {
+                                "at": {
+                                    "$date": {
+                                        "$numberLong": "1633561040809"
+                                    }
+                                },
+                                "value": "WaitingForTransmission"
+                            },
+                            "history": [
+                                {
+                                    "at": {
+                                        "$date": {
+                                            "$numberLong": "1633561040809"
+                                        }
+                                    },
+                                    "value": "WaitingForTransmission"
+                                }
+                            ]
+                        }
+                    },
+                    "status": {
+                        "current": {
+                            "at": {
+                                "$date": {
+                                    "$numberLong": "1633561040809"
+                                }
+                            },
+                            "value": "WaitingForPayment"
+                        },
+                        "history": [
+                            {
+                                "at": {
+                                    "$date": {
+                                        "$numberLong": "1633561040809"
+                                    }
+                                },
+                                "value": "WaitingForPayment"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
