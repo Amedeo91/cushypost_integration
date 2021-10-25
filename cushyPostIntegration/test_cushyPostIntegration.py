@@ -2143,6 +2143,77 @@ class TestCushyPostIntegration(unittest.TestCase):
                                   status=200)
                     try:
                         cushy_post_integration.search_by_quotation_id(["615e295bf6427c79b9749b647890"])
+                        raise Exception("NO QUOTATION FOUND - TEST FAILED")
                     except Exception as error:
                         self.assertEqual(str(error), "NO QUOTATION FOUND")
                     self.assertEqual(len(responses.calls), 3)
+
+    @responses.activate
+    def test_add_shipping_ids_to_cart_success(self):
+        cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+        cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+        cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+        responses.add(responses.POST, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        responses.add(responses.POST, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        responses.add(responses.POST, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        cushy_post_integration.add_shipping_ids_to_cart(["615e29d02a562c5ad47e5792789",
+                                                         "615e29d02a562c5ad47e5792788",
+                                                         "615e29d02a562c5ad47e5792787"])
+        request_sent = json.loads(responses.calls[0].request.body)
+        self.assertDictEqual(request_sent, {"app": "InOne", "type": "shipment", "id": "615e29d02a562c5ad47e5792789"})
+        request_sent = json.loads(responses.calls[1].request.body)
+        self.assertDictEqual(request_sent, {"app": "InOne", "type": "shipment", "id": "615e29d02a562c5ad47e5792788"})
+        request_sent = json.loads(responses.calls[2].request.body)
+        self.assertDictEqual(request_sent, {"app": "InOne", "type": "shipment", "id": "615e29d02a562c5ad47e5792787"})
+        self.assertEqual(len(responses.calls), 3)
+
+    @responses.activate
+    def test_add_shipping_ids_to_cart_error_and_remove(self):
+        cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+        cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+        cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+        responses.add(responses.POST, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        responses.add(responses.POST, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        responses.add(responses.POST, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=500)
+        responses.add(responses.DELETE, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        responses.add(responses.DELETE, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=200)
+        responses.add(responses.DELETE, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=500)
+        try:
+            cushy_post_integration.add_shipping_ids_to_cart(["615e29d02a562c5ad47e5792789",
+                                                             "615e29d02a562c5ad47e5792788",
+                                                             "615e29d02a562c5ad47e5792787"])
+
+            raise Exception("ADD TO CART FAILED - TEST FAILED")
+        except Exception as error:
+            self.assertEqual(str(error), "ADD TO CART FAILED")
+        responses.add(responses.DELETE, "{}/cart/item".format(cushy_post_integration.domain),
+                      json={},
+                      status=500)
+        try:
+            cushy_post_integration.remove_shipping_ids_to_cart(["615e29d02a562c5ad47e5792789"])
+            raise Exception("REMOVE FROM CART FAILED - TEST FAILED")
+        except Exception as error:
+            self.assertEqual(str(error), "REMOVE FROM CART FAILED")
+        self.assertDictEqual(responses.calls[3].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792789'})
+        self.assertDictEqual(responses.calls[4].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792788'})
+        self.assertDictEqual(responses.calls[5].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792787'})
+        self.assertDictEqual(responses.calls[6].request.params, {'app': 'InOne', 'id': '615e29d02a562c5ad47e5792789'})
+        self.assertEqual(len(responses.calls), 7)

@@ -67,7 +67,7 @@ class CushyPostIntegration:
         self.refresh_token = response.raw.headers.get('X-Cushypost-Refresh-JWT')
 
     @logger
-    def __call_endpoint_with_refresh(self, http_method, path, data=None, retry=True):
+    def __call_endpoint_with_refresh(self, http_method, path, params=None, data=None, retry=True):
         """
         Method that integrate CushyPost with the refreshToken call in case of 401
         :param http_method: GET/POST/PATCH/DELETE
@@ -80,10 +80,11 @@ class CushyPostIntegration:
                                     "{}/{}".format(self.domain, path),
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer {}'.format(self.token)},
-                                    data=data)
+                                    data=data,
+                                    params=params)
         if response.status_code == 401 and retry:
             self.refresh_tokens()
-            return self.__call_endpoint_with_refresh(http_method, path, data=data, retry=False)
+            return self.__call_endpoint_with_refresh(http_method, path, params=params, data=data, retry=False)
         return response
 
     @logger
@@ -377,7 +378,7 @@ class CushyPostIntegration:
                                                      "shipment/search",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
-            raise Exception("APPROVE RATE FAILED")
+            raise Exception("SEARCH QUOTATION FAILED")
         return response.json()["response"]["data"]
 
     @logger
@@ -393,6 +394,34 @@ class CushyPostIntegration:
             return shipments
         else:
             return self.search_by_quotation_id(quotation_ids, page=page+1, shipments=shipments)
+
+    @logger
+    def add_shipping_ids_to_cart(self, shipping_ids):
+        for shipping_id in shipping_ids:
+            request_body = {
+                "app": "InOne",
+                "type": "shipment",
+                "id": shipping_id
+            }
+            response = self.__call_endpoint_with_refresh("POST",
+                                                         "cart/item",
+                                                         data=json.dumps(request_body))
+            if response.status_code != 200:
+                self.remove_shipping_ids_to_cart(shipping_ids, raise_error=False)
+                raise Exception("ADD TO CART FAILED")
+
+    @logger
+    def remove_shipping_ids_to_cart(self, shipping_ids, raise_error=True):
+        for shipping_id in shipping_ids:
+            request_body = {
+                "app": "InOne",
+                "id": shipping_id
+            }
+            response = self.__call_endpoint_with_refresh("DELETE",
+                                                         "cart/item",
+                                                         params=request_body)
+            if response.status_code != 200 and raise_error:
+                raise Exception("REMOVE FROM CART FAILED")
 
     def __get_domain(self):
         if self.environment == "TEST":
