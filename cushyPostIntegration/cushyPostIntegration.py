@@ -440,6 +440,21 @@ class CushyPostIntegration:
         self.checkout_session_id = response.json()["response"]["data"]["id"]
         return response.json()["response"]["data"]["url"]
 
+    @logger
+    def confirm_cart(self):
+        if not self.checkout_session_id:
+            raise Exception("CONFIRM CART FAILED - MISSING PARAMETERS")
+        request_body = {
+            "app": self.app,
+            "session_id": self.checkout_session_id
+        }
+        response = self.__call_endpoint_with_refresh("POST",
+                                                     "cart/confirm",
+                                                     data=json.dumps(request_body))
+        if response.status_code != 200:
+            raise Exception("CONFIRM CART FAILED")
+        return response.json()["response"]["data"]
+
     def __get_domain(self):
         if self.environment == "TEST":
             return "https://test.api.cushypost.com"

@@ -2234,5 +2234,26 @@ class TestCushyPostIntegration(unittest.TestCase):
             expected_object["checkout_session_id"] = "1234"
             cushy_post_integration.parse_from_dict(expected_object)
             self.assertDictEqual(cushy_post_integration.get_dict(), expected_object)
+            self.assertEqual(len(responses.calls), 1)
             request_sent = json.loads(responses.calls[0].request.body)
             self.assertDictEqual(request_sent, {"app": "NEW_APP", "success_url": "success_url", "cancel_url": "cancel_url", "description": "description"})
+
+    @responses.activate
+    def test_confirm_cart(self):
+        with open("{}/test_data/confirm_cart_response.json".format(dir_path), 'r') as file:
+            cushy_post_integration = CushyPostIntegration("TEST", "NEW_APP")
+            cushy_post_integration.token = "X-Cushypost-JWT_LOGIN"
+            cushy_post_integration.refresh_token = "X-Cushypost-Refresh-JWT_REFRESH"
+            responses.add(responses.POST, "{}/cart/confirm".format(cushy_post_integration.domain),
+                          json=json.load(file),
+                          status=200)
+            try:
+                cushy_post_integration.confirm_cart()
+                raise Exception("CONFIRM CART FAILED - MISSING PARAMETERS - TEST FAILED")
+            except Exception as error:
+                self.assertEqual("CONFIRM CART FAILED - MISSING PARAMETERS", str(error))
+            cushy_post_integration.checkout_session_id = "1234"
+            cushy_post_integration.confirm_cart()
+            self.assertEqual(len(responses.calls), 1)
+            request_sent = json.loads(responses.calls[0].request.body)
+            self.assertDictEqual(request_sent, {"app": "NEW_APP", "session_id": "1234"})
