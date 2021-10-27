@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name='cushyPostIntegration',
   packages=['cushyPostIntegration'],
-  version='0.0.5',
+  version='0.0.6',
   license='MIT',
   description='Integration of the services of CushyPost',
   author='Amedeo Bussi',
   author_email='amedeobussi@gmail.com',
   url='https://github.com/Amedeo91/cushypost_integration',
-  download_url='https://github.com/Amedeo91/cushypost_integration/archive/refs/tags/V_0.0.5.tar.gz',
+  download_url='https://github.com/Amedeo91/cushypost_integration/archive/refs/tags/V_0.0.6.tar.gz',
   keywords=['cushyPost', 'shipping', 'shipping costs'],
   install_requires=['requests'],
   classifiers=[

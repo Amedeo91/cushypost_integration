@@ -17,5 +17,37 @@ client.set_shipping([{
 	"length": "10",
 	"weight": "10"
 }])
-client.get_rates()
+rate_id = client.get_rates()["list"][0]["id"]["$oid"]
+client.approve_quotation(
+    rate_id,
+    {
+        "country": "IT",
+        "zipCode": "00150",
+        "city": "Roma"
+    },
+    {
+        "country": "IT",
+        "zipCode": "20150",
+        "city": "Milano"
+    },
+    {
+        "year": "2021"
+    },
+    shipping_extra_data={
+        "packages": [{
+            "type": "Parcel",
+            "height": "10",
+            "width": "10",
+            "length": "10",
+            "weight": "10"
+        }]
+    })
+shipping_ids = client.search_by_quotation_id([rate_id])
+client.add_shipping_ids_to_cart(shipping_ids)
+url = "http://localhost:5000"
+client.buy_cart("{}&success=true".format(url),
+                url,
+                "Finalize your payment")
+client.confirm_cart()
+client.get_shipment_label(shipping_ids)
 ```

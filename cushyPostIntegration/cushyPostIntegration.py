@@ -2,7 +2,7 @@ import requests
 import json
 import datetime
 import uuid
-from cushyPostIntegration.logger_decorator import logger
+from cushyPostIntegration.logger_decorator import logger, logging
 
 
 class CushyPostIntegration:
@@ -45,6 +45,7 @@ class CushyPostIntegration:
                                     headers={'Content-Type': 'application/json'},
                                     data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("LOGIN FAILED")
         self.token = response.raw.headers.get('X-Cushypost-JWT')
         self.refresh_token = response.raw.headers.get('X-Cushypost-Refresh-JWT')
@@ -63,6 +64,7 @@ class CushyPostIntegration:
                                              'Authorization': 'Bearer {}'.format(self.refresh_token)},
                                     data=json.dumps({"app": self.app}))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("REFRESH FAILED")
         self.token = response.raw.headers.get('X-Cushypost-JWT')
         self.refresh_token = response.raw.headers.get('X-Cushypost-Refresh-JWT')
@@ -109,6 +111,7 @@ class CushyPostIntegration:
                                                      "geodb/place_autocomplete",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("GEODB AUTOCOMPLETE FAILED")
         # I am expecting only one result
         locations = response.json()["response"]["data"]
@@ -292,6 +295,7 @@ class CushyPostIntegration:
                                                      "shipment/rate",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("SHIPPING RATE FAILED")
         return response.json()["response"]["data"]
 
@@ -349,6 +353,7 @@ class CushyPostIntegration:
                                                      "quotation/approve",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("APPROVE RATE FAILED")
         return response.json()["response"]["data"]
 
@@ -385,6 +390,7 @@ class CushyPostIntegration:
                                                      "shipment/search",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("SEARCH PAID SHIPMENTS FAILED")
         return response.json()["response"]["data"]
 
@@ -415,6 +421,7 @@ class CushyPostIntegration:
                                                      "shipment/search",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("SEARCH QUOTATION FAILED")
         return response.json()["response"]["data"]
 
@@ -446,6 +453,7 @@ class CushyPostIntegration:
         :param shipping_ids: Shipping ids to add
         :return:
         """
+        response = None
         for shipping_id in shipping_ids:
             request_body = {
                 "app": self.app,
@@ -456,8 +464,11 @@ class CushyPostIntegration:
                                                          "cart/item",
                                                          data=json.dumps(request_body))
             if response.status_code != 200:
+                logging.error(response.json())
                 self.remove_shipping_ids_to_cart(shipping_ids, raise_error=False)
                 raise Exception("ADD TO CART FAILED")
+            response = response.json().get("response", {}).get("data")
+        return response
 
     @logger
     def remove_shipping_ids_to_cart(self, shipping_ids, raise_error=True):
@@ -467,6 +478,7 @@ class CushyPostIntegration:
         :param raise_error: (optional) continue removing without raising error
         :return:
         """
+        response = None
         for shipping_id in shipping_ids:
             request_body = {
                 "app": self.app,
@@ -476,7 +488,11 @@ class CushyPostIntegration:
                                                          "cart/item",
                                                          params=request_body)
             if response.status_code != 200 and raise_error:
+                logging.error(response.json())
                 raise Exception("REMOVE FROM CART FAILED")
+            else:
+                response = response.json().get("response", {}).get("data")
+        return response
 
     @logger
     def buy_cart(self, success_url, cancel_url, description):
@@ -497,6 +513,7 @@ class CushyPostIntegration:
                                                      "cart/buy",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("BUY CART FAILED")
         self.checkout_session_id = response.json()["response"]["data"]["id"]
         return response.json()["response"]["data"]["url"]
@@ -517,6 +534,7 @@ class CushyPostIntegration:
                                                      "cart/confirm",
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
+            logging.error(response.json())
             raise Exception("CONFIRM CART FAILED")
         return response.json()["response"]["data"]
 
