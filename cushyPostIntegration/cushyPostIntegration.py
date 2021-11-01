@@ -3,6 +3,10 @@ import json
 import datetime
 import uuid
 from cushyPostIntegration.logger_decorator import logger, logging
+from cushyPostIntegration.exceptions import LoginFailed, RefreshFailed, MissingToken, ShippingRateFailed, \
+    GeoDbAutoComplete, MissingFrom, MissingData, ApproveRateFailed, SearchPaidShipmentsFailed, SearchQuotationFailed, \
+    NoQuotationFoundFailed, AddToCartFailed, RemoveFromCartFailed, BuyCartFailed, ConfirmCartFailed, \
+    ConfirmCartMissingParameters, InvalidEnvironment
 
 
 class CushyPostIntegration:
@@ -46,7 +50,7 @@ class CushyPostIntegration:
                                     data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("LOGIN FAILED")
+            raise LoginFailed()
         self.token = response.raw.headers.get('X-Cushypost-JWT')
         self.refresh_token = response.raw.headers.get('X-Cushypost-Refresh-JWT')
 
@@ -57,7 +61,7 @@ class CushyPostIntegration:
         :return:
         """
         if not self.refresh_token:
-            raise Exception("MISSING TOKENS")
+            raise MissingToken()
         response = requests.request("POST",
                                     "{}/security/refresh_token".format(self.domain),
                                     headers={'Content-Type': 'application/json',
@@ -65,7 +69,7 @@ class CushyPostIntegration:
                                     data=json.dumps({"app": self.app}))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("REFRESH FAILED")
+            raise RefreshFailed()
         self.token = response.raw.headers.get('X-Cushypost-JWT')
         self.refresh_token = response.raw.headers.get('X-Cushypost-Refresh-JWT')
 
@@ -100,7 +104,7 @@ class CushyPostIntegration:
         :return:
         """
         if not self.token:
-            raise Exception("MISSING TOKENS")
+            raise MissingToken()
         request_body = {
             "app": self.app,
             "country_code": country_code,
@@ -112,7 +116,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("GEODB AUTOCOMPLETE FAILED")
+            raise GeoDbAutoComplete()
         # I am expecting only one result
         locations = response.json()["response"]["data"]
         if multi_results:
@@ -123,7 +127,7 @@ class CushyPostIntegration:
             # This part is useful for the quotation part! As the CAP define the price.
             locations = self.__geo_db_place_autocomplete(country_code, cap, multi_results=True)
             if len(locations) == 0:
-                raise Exception("GEODB AUTOCOMPLETE FAILED")
+                raise GeoDbAutoComplete()
         return locations[0]
 
     @logger
@@ -195,9 +199,9 @@ class CushyPostIntegration:
         :return:
         """
         if not self.from_location:
-            raise Exception("MISSING FROM")
+            raise MissingFrom()
         if not self.token:
-            raise Exception("MISSING TOKENS")
+            raise MissingToken()
         request_body = {
             "app": self.app,
             "country": self.from_location["country"],
@@ -255,7 +259,7 @@ class CushyPostIntegration:
         :return:
         """
         if not packages:
-            raise Exception("MISSING DATA")
+            raise MissingData()
         self.shipping = {
             "total_weight": sum([int(package["weight"]) for package in packages]),
             "goods_desc": goods_desc if goods_desc else "content",
@@ -281,9 +285,9 @@ class CushyPostIntegration:
         :return:
         """
         if not self.token:
-            raise Exception("MISSING TOKENS")
+            raise MissingToken()
         if not self.from_location or not self.to_location or not self.shipping or not self.services:
-            raise Exception("MISSING DATA")
+            raise MissingData()
         request_body = {
             "app": self.app,
             "from": self.from_location,
@@ -296,7 +300,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("SHIPPING RATE FAILED")
+            raise ShippingRateFailed()
         return response.json()["response"]["data"]
 
     @logger
@@ -312,9 +316,9 @@ class CushyPostIntegration:
         :return:
         """
         if not self.token:
-            raise Exception("MISSING TOKENS")
+            raise MissingToken()
         if not self.from_location or not self.to_location or not self.shipping or not self.services:
-            raise Exception("MISSING DATA")
+            raise MissingData()
         # PUT FINAL INFORMATION FOR ADDRESSES AND DESCRIPTIONS
         self.from_location["name"] = from_extra_data["name"]
         self.from_location["phone"] = from_extra_data["phone"]
@@ -354,7 +358,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("APPROVE RATE FAILED")
+            raise ApproveRateFailed()
         return response.json()["response"]["data"]
 
     @logger
@@ -391,7 +395,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("SEARCH PAID SHIPMENTS FAILED")
+            raise SearchPaidShipmentsFailed()
         return response.json()["response"]["data"]
 
     @logger
@@ -422,7 +426,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("SEARCH QUOTATION FAILED")
+            raise SearchQuotationFailed()
         return response.json()["response"]["data"]
 
     @logger
@@ -437,7 +441,7 @@ class CushyPostIntegration:
         page = 0 if page is None else page
         response_data = self.search_quotation_to_pay(page)
         if len(response_data.get("items", [])) == 0:
-            raise Exception("NO QUOTATION FOUND")
+            raise NoQuotationFoundFailed()
         shipments = [] if shipments is None else shipments
         shipments.extend([item["_id"]["$oid"]
                           for item in response_data["items"] if item["quotation"]["id"] in quotation_ids])
@@ -466,7 +470,7 @@ class CushyPostIntegration:
             if response.status_code != 200:
                 logging.error(response.json())
                 self.remove_shipping_ids_to_cart(shipping_ids, raise_error=False)
-                raise Exception("ADD TO CART FAILED")
+                raise AddToCartFailed()
             response = response.json().get("response", {}).get("data")
         return response
 
@@ -489,7 +493,7 @@ class CushyPostIntegration:
                                                          params=request_body)
             if response.status_code != 200 and raise_error:
                 logging.error(response.json())
-                raise Exception("REMOVE FROM CART FAILED")
+                raise RemoveFromCartFailed()
             else:
                 response = response.json().get("response", {}).get("data")
         return response
@@ -514,7 +518,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("BUY CART FAILED")
+            raise BuyCartFailed()
         self.checkout_session_id = response.json()["response"]["data"]["id"]
         return response.json()["response"]["data"]["url"]
 
@@ -525,7 +529,7 @@ class CushyPostIntegration:
         :return:
         """
         if not self.checkout_session_id:
-            raise Exception("CONFIRM CART FAILED - MISSING PARAMETERS")
+            raise ConfirmCartMissingParameters()
         request_body = {
             "app": self.app,
             "session_id": self.checkout_session_id
@@ -535,7 +539,7 @@ class CushyPostIntegration:
                                                      data=json.dumps(request_body))
         if response.status_code != 200:
             logging.error(response.json())
-            raise Exception("CONFIRM CART FAILED")
+            raise ConfirmCartFailed()
         return response.json()["response"]["data"]
 
     @logger
@@ -568,7 +572,7 @@ class CushyPostIntegration:
         elif self.environment == "PRD":
             return "https://api.cushypost.com"
         else:
-            raise Exception("ENVIRONMENT NOT VALID")
+            raise InvalidEnvironment()
 
     def parse_from_str(self, class_json_image):
         """
