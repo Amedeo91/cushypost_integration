@@ -42,7 +42,7 @@ client.approve_quotation(
             "weight": "10"
         }]
     })
-shipping_ids = client.search_by_quotation_id([rate_id])
+shipping_ids, tracking_urls = client.search_by_quotation_id([rate_id])
 client.add_shipping_ids_to_cart(shipping_ids)
 url = "http://localhost:5000"
 client.buy_cart("{}&success=true".format(url),

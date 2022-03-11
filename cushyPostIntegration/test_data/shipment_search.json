@@ -153,6 +153,7 @@
                             "$oid": "5eab2d8013078b1163681967"
                         },
                         "type": "shipping",
+                        "tracking_url_format": "tracking_url_format2",
                         "proposer": {
                             "_id": {
                                 "$oid": "57f25d82beb0b0ec7ad44b91"
@@ -1772,6 +1773,7 @@
                             "$oid": "5eab2d8013078b1163681967"
                         },
                         "type": "shipping",
+                        "tracking_url_format": "tracking_url_format3",
                         "proposer": {
                             "_id": {
                                 "$oid": "57f25d82beb0b0ec7ad44b91"
@@ -3393,6 +3395,7 @@
                             "$oid": "5eab2d8013078b1163681967"
                         },
                         "type": "shipping",
+                        "tracking_url_format": "tracking_url_format5",
                         "proposer": {
                             "_id": {
                                 "$oid": "57f25d82beb0b0ec7ad44b91"
@@ -5014,6 +5017,7 @@
                             "$oid": "5eab2d8013078b1163681967"
                         },
                         "type": "shipping",
+                        "tracking_url_format": "tracking_url_format6",
                         "proposer": {
                             "_id": {
                                 "$oid": "57f25d82beb0b0ec7ad44b91"

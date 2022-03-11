@@ -2120,9 +2120,10 @@ class TestCushyPostIntegration(unittest.TestCase):
                 responses.add(responses.POST, "{}/shipment/search".format(cushy_post_integration.domain),
                               json=json.load(file_2),
                               status=200)
-                results = cushy_post_integration.search_by_quotation_id(["615e295bf6427c79b9749b64789"])
+                shi_ids, tracking_urls = cushy_post_integration.search_by_quotation_id(["615e295bf6427c79b9749b64789"])
                 self.assertEqual(len(responses.calls), 2)
-                self.assertListEqual(results, ["615e29d02a562c5ad47e5792789"])
+                self.assertListEqual(shi_ids, ["615e29d02a562c5ad47e5792789"])
+                self.assertListEqual(tracking_urls, ["tracking_url_format1"])
 
     @responses.activate
     def test_search_by_quotation_id_many_call_error(self):

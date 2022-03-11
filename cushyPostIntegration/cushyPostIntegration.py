@@ -430,12 +430,13 @@ class CushyPostIntegration:
         return response.json()["response"]["data"]
 
     @logger
-    def search_by_quotation_id(self, quotation_ids, page=None, shipments=None):
+    def search_by_quotation_id(self, quotation_ids, page=None, shipments=None, tracking_url_list=None):
         """
 
         :param quotation_ids: quotation to get
         :param page: (optional) page to start to search
         :param shipments: (optional) list to start to build
+        :param tracking_url_list: (optional) list of tracking URL
         :return:
         """
         page = 0 if page is None else page
@@ -443,12 +444,22 @@ class CushyPostIntegration:
         if len(response_data.get("items", [])) == 0:
             raise NoQuotationFoundFailed()
         shipments = [] if shipments is None else shipments
-        shipments.extend([item["_id"]["$oid"]
-                          for item in response_data["items"] if item["quotation"]["id"] in quotation_ids])
+        tracking_url_list = [] if tracking_url_list is None else tracking_url_list
+        for item in response_data["items"]:
+            if item["quotation"]["id"] in quotation_ids:
+                shipments.append(item["_id"]["$oid"])
+                try:
+                    tracking_url_list.append(item.get("contract", {}).get("tracking_url_format", ""))
+                except Exception as error:
+                    logging.error(error)
+                    tracking_url_list.append("")
         if len(quotation_ids) == len(shipments):
-            return shipments
+            return shipments, tracking_url_list
         else:
-            return self.search_by_quotation_id(quotation_ids, page=page+1, shipments=shipments)
+            return self.search_by_quotation_id(quotation_ids,
+                                               page=page+1,
+                                               shipments=shipments,
+                                               tracking_url_list=tracking_url_list)
 
     @logger
     def add_shipping_ids_to_cart(self, shipping_ids):
